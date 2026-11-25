@@ -1,0 +1,31 @@
+periodo;hipotese;sexo;descricao;estimativa;ic_inf;ic_sup;sustentada;p_usado;p_holm;sobrevive_a_holm_5pct
+2000-2004;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);0.26131;0.24517;0.27573;1;1e-300;3e-299;1
+2000-2004;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);0.25773;0.24022;0.27535;1;1e-300;3e-299;1
+2000-2004;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;1.4386;1.2889;1.6263;1;8.7348e-10;5.2409e-09;1
+2000-2004;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;1.2277;1.1579;1.3052;1;1.877e-11;1.3139e-10;1
+2000-2004;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=80+; prob. no bootstrap de o pico coincidir=0.000";;;;1;3.1987e-57;4.798e-56;1
+2005-2009;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);0.21451;0.20005;0.22778;1;1e-300;3e-299;1
+2005-2009;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);0.21677;0.20004;0.23005;1;1e-300;3e-299;1
+2005-2009;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;1.3539;1.1779;1.5344;1;7.0578e-06;2.1173e-05;1
+2005-2009;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;1.4195;1.3149;1.5459;1;2.1677e-17;1.7341e-16;1
+2005-2009;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";;;;1;1.7202e-37;1.8922e-36;1
+2010-2014;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);0.18628;0.17078;0.19878;1;1e-300;3e-299;1
+2010-2014;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);0.17988;0.16259;0.19412;1;1e-300;3e-299;1
+2010-2014;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;1.4012;1.2458;1.5724;1;1.3518e-08;5.407e-08;1
+2010-2014;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;1.8728;1.7057;2.0333;1;1.5693e-44;2.0401e-43;1
+2010-2014;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";;;;1;8.0575e-46;1.128e-44;1
+2015-2019;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);0.20068;0.18436;0.21643;1;1e-300;3e-299;1
+2015-2019;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);0.18572;0.16653;0.20393;1;1e-300;3e-299;1
+2015-2019;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;1.4854;1.3133;1.7034;1;2.4662e-09;1.2331e-08;1
+2015-2019;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;2.46;2.2519;2.7006;1;5.2514e-84;8.4022e-83;1
+2015-2019;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";;;;1;6.8983e-44;8.278e-43;1
+2020-2021 pandemia;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);0.21409;0.19436;0.23291;1;1.0785e-210;2.2648e-209;1
+2020-2021 pandemia;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);0.20879;0.18555;0.22559;1;2.2174e-153;4.2131e-152;1
+2020-2021 pandemia;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;1.1312;1.0086;1.2778;1;0.041086;0.041086;1
+2020-2021 pandemia;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;2.4498;2.2461;2.6825;1;4.2973e-87;7.7351e-86;1
+2020-2021 pandemia;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.020";;;;1;6.6173e-21;5.9556e-20;1
+2022-2024;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);0.1921;0.16843;0.21659;1;2.0531e-265;4.5168e-264;1
+2022-2024;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);0.20033;0.17995;0.2233;1;1.9545e-209;3.909e-208;1
+2022-2024;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;1.2949;1.1347;1.5009;1;0.00029242;0.00058483;1
+2022-2024;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;2.3411;2.1428;2.5438;1;3.7379e-84;6.3543e-83;1
+2022-2024;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";;;;1;3.673e-21;3.673e-20;1

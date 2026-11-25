@@ -1,0 +1,35 @@
+agrupamento;hipotese;sexo;descricao;estimativa;ic_inf;ic_sup;p
+B;tau_por_faixa;homens;0;0.20068;0.18534;0.21633;
+B;tau_por_faixa;homens;1-9;0.25227;0.22113;0.28692;
+B;tau_por_faixa;homens;10-24;0.35602;0.33269;0.3738;
+B;tau_por_faixa;homens;25-44;0.21712;0.20604;0.22775;
+B;tau_por_faixa;homens;45-64;0.13985;0.12987;0.15043;
+B;tau_por_faixa;homens;65-79;0.15801;0.14702;0.17016;
+B;tau_por_faixa;homens;80+;0.12311;0.11324;0.13272;
+B;tau_por_faixa;mulheres;0;0.18572;0.16627;0.20769;
+B;tau_por_faixa;mulheres;1-9;0.2694;0.23081;0.31174;
+B;tau_por_faixa;mulheres;10-24;0.16534;0.14881;0.18306;
+B;tau_por_faixa;mulheres;25-44;0.12883;0.11649;0.13874;
+B;tau_por_faixa;mulheres;45-64;0.14017;0.13041;0.1504;
+B;tau_por_faixa;mulheres;65-79;0.14101;0.13119;0.14999;
+B;tau_por_faixa;mulheres;80+;0.12242;0.10938;0.13648;
+B;H2;homens;tau(10-24)/tau(1-9);1.4113;1.2155;1.6144;0
+B;H2;homens;tau(10-24)/tau(25-44);1.6398;1.5333;1.729;0
+B;H3;homens vs mulheres;"Wald paralelismo (6 gl) = 221.5; pico homens=10-24; pico mulheres=1-9";221.51;;;4.9645e-45
+C;tau_por_faixa;homens;0;0.20068;0.18534;0.21633;
+C;tau_por_faixa;homens;1-14;0.23067;0.20721;0.25771;
+C;tau_por_faixa;homens;15-24;0.37077;0.34714;0.39034;
+C;tau_por_faixa;homens;25-34;0.27546;0.25995;0.28914;
+C;tau_por_faixa;homens;35-59;0.1361;0.12558;0.14786;
+C;tau_por_faixa;homens;60-79;0.15627;0.14679;0.16714;
+C;tau_por_faixa;homens;80+;0.12311;0.11324;0.13272;
+C;tau_por_faixa;mulheres;0;0.18572;0.16627;0.20769;
+C;tau_por_faixa;mulheres;1-14;0.23852;0.21268;0.27108;
+C;tau_por_faixa;mulheres;15-24;0.16409;0.14828;0.18037;
+C;tau_por_faixa;mulheres;25-34;0.14801;0.13147;0.16101;
+C;tau_por_faixa;mulheres;35-59;0.12801;0.11995;0.13689;
+C;tau_por_faixa;mulheres;60-79;0.1419;0.13162;0.1513;
+C;tau_por_faixa;mulheres;80+;0.12242;0.10938;0.13648;
+C;H2;homens;tau(15-24)/tau(1-14);1.6074;1.395;1.808;0
+C;H2;homens;tau(15-24)/tau(25-34);1.346;1.2743;1.4086;0
+C;H3;homens vs mulheres;"Wald paralelismo (6 gl) = 215.1; pico homens=15-24; pico mulheres=1-14";215.07;;;1.1703e-43

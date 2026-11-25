@@ -1,0 +1,43 @@
+periodo;hipotese;sexo;descricao;estatistica;estimativa;ic_inf;ic_sup;p;sustentada
+2000-2004;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);9693.5;0.26131;0.24517;0.27573;0;1
+2000-2004;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);6332.9;0.25773;0.24022;0.27535;0;1
+2000-2004;H1b;homens;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.058778;0.044414;0.072313;;1
+2000-2004;H1b;mulheres;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.16719;0.1475;0.18919;;1
+2000-2004;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;;1.4386;1.2889;1.6263;0;1
+2000-2004;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;;1.2277;1.1579;1.3052;0;1
+2000-2004;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=80+; prob. no bootstrap de o pico coincidir=0.000";274.39;;;;3.1987e-57;1
+2005-2009;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);4491.7;0.21451;0.20005;0.22778;0;1
+2005-2009;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);3135.4;0.21677;0.20004;0.23005;0;1
+2005-2009;H1b;homens;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.047262;0.034498;0.060428;;1
+2005-2009;H1b;mulheres;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.13992;0.12006;0.16081;;1
+2005-2009;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;;1.3539;1.1779;1.5344;0;1
+2005-2009;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;;1.4195;1.3149;1.5459;0;1
+2005-2009;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";182.31;;;;1.7202e-37;1
+2010-2014;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);2751;0.18628;0.17078;0.19878;0;1
+2010-2014;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);1937.1;0.17988;0.16259;0.19412;0;1
+2010-2014;H1b;homens;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.049986;0.037067;0.066287;;1
+2010-2014;H1b;mulheres;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.10734;0.085274;0.12889;;1
+2010-2014;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;;1.4012;1.2458;1.5724;0;1
+2010-2014;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;;1.8728;1.7057;2.0333;0;1
+2010-2014;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";221.24;;;;8.0575e-46;1
+2015-2019;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);2857;0.20068;0.18436;0.21643;0;1
+2015-2019;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);1935.7;0.18572;0.16653;0.20393;0;1
+2015-2019;H1b;homens;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.067081;0.052158;0.082622;;1
+2015-2019;H1b;mulheres;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.14073;0.11535;0.1677;;1
+2015-2019;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;;1.4854;1.3133;1.7034;0;1
+2015-2019;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;;2.46;2.2519;2.7006;0;1
+2015-2019;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";212.22;;;;6.8983e-44;1
+2020-2021 pandemia;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);958.23;0.21409;0.19436;0.23291;1.0785e-210;1
+2020-2021 pandemia;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);694.61;0.20879;0.18555;0.22559;2.2174e-153;1
+2020-2021 pandemia;H1b;homens;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.071268;0.056462;0.085394;;1
+2020-2021 pandemia;H1b;mulheres;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.081338;0.060495;0.10173;;1
+2020-2021 pandemia;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;;1.1312;1.0086;1.2778;0.04;1
+2020-2021 pandemia;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;;2.4498;2.2461;2.6825;0;1
+2020-2021 pandemia;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.020";104.28;;;;6.6173e-21;1
+2022-2024;H1a;homens;tau da faixa 0 maior que zero (razao de verossimilhanca);1210;0.1921;0.16843;0.21659;2.0531e-265;1
+2022-2024;H1a;mulheres;tau da faixa 0 maior que zero (razao de verossimilhanca);952.44;0.20033;0.17995;0.2233;1.9545e-209;1
+2022-2024;H1b;homens;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.095565;0.078536;0.11587;;1
+2022-2024;H1b;mulheres;participacao da faixa 0 na variancia entre microrregioes de e0-80 (IC acima de zero);;0.16407;0.13112;0.19185;;1
+2022-2024;H2;homens;razao tau(15-29) / tau(1-14) maior que 1;;1.2949;1.1347;1.5009;0;1
+2022-2024;H2;homens;razao tau(15-29) / tau(30-59) maior que 1;;2.3411;2.1428;2.5438;0;1
+2022-2024;H3;homens vs mulheres;"perfis de log(tau) paralelos entre os sexos (Wald, 5 gl); pico homens=15-29, pico mulheres=1-14; prob. no bootstrap de o pico coincidir=0.000";105.49;;;;3.673e-21;1

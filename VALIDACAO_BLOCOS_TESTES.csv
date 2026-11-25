@@ -1,0 +1,21 @@
+esquema;teste;estatistica;p
+UF (27 blocos);H2_15-29_sobre_1-14;3.6686;0.00012196
+UF (27 blocos);H2_15-29_sobre_30-59;6.8937;2.7188e-12
+UF (27 blocos);H3 Wald (5 gl);92.347;2.1582e-18
+UF (27 blocos);prob. pico masculino em 15-29;1;
+UF (27 blocos);prob. picos coincidirem;0;
+agrupamentos espaciais (20 blocos);H2_15-29_sobre_1-14;3.3948;0.00034341
+agrupamentos espaciais (20 blocos);H2_15-29_sobre_30-59;7.7436;4.8331e-15
+agrupamentos espaciais (20 blocos);H3 Wald (5 gl);93.471;1.2523e-18
+agrupamentos espaciais (20 blocos);prob. pico masculino em 15-29;1;
+agrupamentos espaciais (20 blocos);prob. picos coincidirem;0;
+agrupamentos espaciais (60 blocos);H2_15-29_sobre_1-14;4.3881;5.7183e-06
+agrupamentos espaciais (60 blocos);H2_15-29_sobre_30-59;11.114;5.3857e-29
+agrupamentos espaciais (60 blocos);H3 Wald (5 gl);113.69;6.8107e-23
+agrupamentos espaciais (60 blocos);prob. pico masculino em 15-29;1;
+agrupamentos espaciais (60 blocos);prob. picos coincidirem;0;
+independente (microrregiao);H2_15-29_sobre_1-14;6.0266;8.3741e-10
+independente (microrregiao);H2_15-29_sobre_30-59;21.211;3.811e-100
+independente (microrregiao);H3 Wald (5 gl);205.8;1.6322e-42
+independente (microrregiao);prob. pico masculino em 15-29;1;
+independente (microrregiao);prob. picos coincidirem;0;
