@@ -5,6 +5,7 @@ on:
     branches:
       - auditoria-chatgpt-2026-11-27
       - codex-preparo-h10
+      - chatgpt-tau-periodos
   pull_request:
     branches:
       - main
@@ -26,5 +27,5 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencias dos testes
         run: python -m pip install --upgrade pip numpy pandas scipy
-      - name: Executar testes de classificacao e H10
-        run: python -m unittest -v test_classificacao_causas test_h10_shapley
+      - name: Executar testes de classificacao, H10 e tau por periodo
+        run: python -m unittest -v test_classificacao_causas test_h10_shapley test_causas_tau_periodos
