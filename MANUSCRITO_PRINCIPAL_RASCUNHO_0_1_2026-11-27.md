@@ -144,9 +144,9 @@ A pandemia produziu alterações diferentes por sexo e idade. O aumento da heter
 
 ### 4.1 Relação com a literatura
 
-Estudos anteriores já documentaram diferenciais regionais de mortalidade no Brasil e contribuições de idade e causas para diferenças na esperança de vida. Calazans, Guimarães e Nepomuceno (2023) examinaram diferenças regionais de esperança de vida e dispersão da idade à morte, incluindo contribuições por grupos de causas. Borges (2017) analisou a transição da saúde e a divergência/convergência regional da mortalidade.
+Estudos anteriores já documentaram diferenciais regionais de mortalidade no Brasil e contribuições de idade e causas para diferenças na esperança de vida. Calazans, Guimarães e Nepomuceno (2023) examinaram diferenças regionais de esperança de vida e dispersão da idade à morte, incluindo contribuições por grupos de causas. Borges (2017) analisou a transição da saúde e a divergência/convergência regional da mortalidade. Lima et al. (2024) avaliaram a qualidade dos registros e a mortalidade adulta nas mesmas 558 microrregiões entre 1980 e 2010, demonstrando a importância da completude do SIM. Gonzaga et al. (2024) estimaram e projetaram taxas por idade e sexo em todos os municípios brasileiros. Mais recentemente, Martin e Camarda (2026) propuseram um modelo que combina padrões suaves e desvios locais em idade, espaço e tempo para estimar mortalidade em pequenas áreas. Esses trabalhos mostram que estimação em pequenas áreas e análise espacial da mortalidade são linhas consolidadas.
 
-A contribuição específica deste trabalho é a mensuração da heterogeneidade residual por idade e sexo em 558 microrregiões, com modelo Poisson-lognormal e inferência espacial por blocos. Essa contribuição deve ser apresentada como extensão de escala e de estimando, não como a primeira análise de desigualdade territorial ou de decomposição por causas no Brasil. A busca bibliográfica ainda precisa ser sistematizada.
+A contribuição específica deste trabalho é a mensuração longitudinal da heterogeneidade residual por idade e sexo em 558 microrregiões, com modelo Poisson-lognormal e inferência espacial por blocos, entre 2000 e 2024. O estudo também documenta como a dependência espacial altera a incerteza das comparações. Essa contribuição deve ser apresentada como aplicação de um estimando específico e extensão temporal, não como a primeira análise de desigualdade territorial ou de decomposição por causas no Brasil. O modelo é mais parcimonioso que abordagens recentes que suavizam conjuntamente idade, espaço e tempo; sua vantagem pretendida é a interpretação direta de τ, e não maior flexibilidade preditiva. A busca bibliográfica ainda precisa ser sistematizada.
 
 ### 4.2 Limitações
 
@@ -177,6 +177,9 @@ A interpretação deve permanecer restrita à mortalidade registrada e à hetero
 3. Lima, E. E. C., et al. (2024). Analyzing regional patterns of mortality data quality and adult mortality for small areas in Brazil, 1980–2010. *Demographic Research*, 51(44). https://doi.org/10.4054/DemRes.2024.51.44
 4. Vierboom, Y. C., Preston, S. H., & Hendi, A. S. (2019). Rising geographic inequality in mortality in the United States. *SSM - Population Health*, 9, 100478. https://doi.org/10.1016/j.ssmph.2019.100478
 5. Nau, C., & Firebaugh, G. (2012). A new method for determining why length of life is more unequal in some populations than in others. *Demography*, 49(4), 1207–1230. https://doi.org/10.1007/s13524-012-0133-9
+6. Martin, J., & Camarda, C. G. (2026). Modeling smooth and localized mortality patterns across age, time, and space to uncover small-area inequalities. *Journal of the Royal Statistical Society: Series A*. https://doi.org/10.1093/jrsssa/qnag093
+7. Gonzaga, M. R., et al. (2024). Estimation and probabilistic projection of age- and sex-specific mortality rates across Brazilian municipalities between 2010 and 2030. *Population Health Metrics*. https://doi.org/10.1186/s12963-024-00329-x
+8. Monteiro da Silva, et al. (2026). The Emergence of an Urban Mortality Advantage in Brazil: An Assessment of Age and Causes-of-Death Contributions to the Urban–Rural Mortality Gap. *Journal of Urban Health*. https://doi.org/10.1007/s11524-026-01076-0
 
 ## Pendências editoriais antes de submissão
 
