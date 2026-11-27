@@ -54,8 +54,12 @@ def grupo_causa(cb, linhas_do_atestado=()):
     if L == "U" and n == 7:
         return "covid19"
     if L == "B" and n == 34:
-        codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
-        if "U071" in codigos or "U072" in codigos:
+        if isinstance(linhas_do_atestado, bool):
+            marcador = linhas_do_atestado
+        else:
+            codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
+            marcador = "U071" in codigos or "U072" in codigos
+        if marcador:
             return "covid19"
     if L in "VWXY":
         if L == "X" and 60 <= n <= 84:
@@ -142,10 +146,11 @@ def contar(dbf, mapa):
                     else:
                         cb = dbf[base + c0:base + c1].strip()
                         marcadores = [dbf[base + a:base + b].strip() for a, b in campos_linhas]
-                        chave = (cb, tuple(marcadores))
+                        tem_marcador = any("U071" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") or "U072" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") for v in marcadores)
+                        chave = (cb, tem_marcador)
                         gc = grupos_causa.get(chave)
                         if gc is None:
-                            gc = grupos_causa[chave] = grupo_causa(cb, marcadores)
+                            gc = grupos_causa[chave] = grupo_causa(cb, tem_marcador)
                         if gc == "sem_causa":
                             q["sem_causa"] += 1
                         cont[(mic, sx.decode("latin-1"), g, gc)] += 1
