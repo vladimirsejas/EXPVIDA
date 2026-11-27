@@ -35,22 +35,26 @@ import brasil_expectativa as be
 import inventario_sim_ac as inv
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache")
+CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache_v2")
 ANOS = (2015, 2016, 2017, 2018, 2019)
 UFS = be.UFS
 PROCESSOS = be.PROCESSOS
 CAMINHO_SIM = be.CAMINHO_SIM
 GRUPOS = ["agressoes", "intervencao_legal", "suicidio", "transporte", "intencao_indeterminada", "acidentes_outros",
-          "externas_outras", "infecciosas", "neoplasias", "endocrinas_nutricionais", "circulatorias", "respiratorias",
+          "externas_outras", "covid19", "infecciosas", "neoplasias", "endocrinas_nutricionais", "circulatorias", "respiratorias",
           "digestivas", "perinatais", "congenitas", "mal_definidas", "outras_doencas", "sem_causa"]
 
 
-def grupo_causa(cb):
-    """CAUSABAS (bytes, ex.: b'X954') -> grupo de causa (mutuamente exclusivo)."""
+def grupo_causa(cb, linhas_do_atestado=()):
+    """Classifica causa basica; COVID exige B34.2 e marcador U07.1/U07.2."""
     s = cb.decode("latin-1").strip().upper()
     if len(s) < 3 or not s[0].isalpha() or not s[1:3].isdigit():
         return "sem_causa"
     L, n = s[0], int(s[1:3])
+    if L == "B" and n == 34:
+        codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
+        if "U071" in codigos or "U072" in codigos:
+            return "covid19"
     if L in "VWXY":
         if L == "X" and 60 <= n <= 84:
             return "suicidio"
@@ -100,13 +104,14 @@ def carregar_mapa():
 def contar(dbf, mapa):
     n_reg, tam_cab, tam_reg, cols = inv.ler_dbf(dbf)
     pos = {nome: (a, b) for nome, a, b in cols}
-    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS"):
+    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS", "LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII"):
         if nome not in pos:
             raise RuntimeError("coluna %s ausente no arquivo" % nome)
     s0, s1 = pos["SEXO"]
     i0, i1 = pos["IDADE"]
     m0, m1 = pos["CODMUNRES"]
     c0, c1 = pos["CAUSABAS"]
+    campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII")]
     cont = defaultdict(int)
     q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "municipio_ign": 0, "sem_causa": 0}
     grupos_idade, grupos_causa = {}, {}
@@ -134,9 +139,11 @@ def contar(dbf, mapa):
                         q["municipio_ign"] += 1
                     else:
                         cb = dbf[base + c0:base + c1].strip()
-                        gc = grupos_causa.get(cb)
+                        marcadores = [dbf[base + a:base + b].strip() for a, b in campos_linhas]
+                        chave = (cb, tuple(marcadores))
+                        gc = grupos_causa.get(chave)
                         if gc is None:
-                            gc = grupos_causa[cb] = grupo_causa(cb)
+                            gc = grupos_causa[chave] = grupo_causa(cb, marcadores)
                         if gc == "sem_causa":
                             q["sem_causa"] += 1
                         cont[(mic, sx.decode("latin-1"), g, gc)] += 1
