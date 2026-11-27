@@ -45,9 +45,11 @@ CAUSE_GROUPS = tuple(dict.fromkeys(CAUSE_GROUP.values()))
 AGE_WIDTHS = np.array([1, 4] + [5] * 15 + [None], dtype=object)
 
 
-def _life_e0_80(deaths, person_years, sex):
-    """Calcula e0-80 em vetor para várias microrregiões, replicando piloto_expectativa.tabua."""
-    m = np.asarray(deaths, dtype=float) / np.asarray(person_years, dtype=float)
+def _life_e0_80(mortality_rates, sex):
+    """Calcula e0-80 a partir de taxas centrais de mortalidade por idade."""
+    m = np.asarray(mortality_rates, dtype=float)
+    if m.ndim != 2 or m.shape[1] != 17:
+        raise ValueError("A tábua requer taxas para 17 grupos etários (0 a 75-79)")
     m0 = m[:, 0]
     if sex == 1:
         a0 = np.where(m0 >= 0.107, 0.330, 0.045 + 2.684 * m0)
@@ -90,7 +92,7 @@ def variance_e0_80(deaths_by_cause, person_years, sex, national_rates, equalized
             rates[:, :, j] = national_rates[None, :, j]
     total_rates = rates.sum(axis=2)
     # A tábua e0-80 usa os grupos 0 a 75-79; a idade 80+ não entra no cálculo.
-    e = _life_e0_80(total_rates[:, :17], py[:, :17], sex)
+    e = _life_e0_80(total_rates[:, :17], sex)
     return float(np.var(e, ddof=0)), e
 
 
