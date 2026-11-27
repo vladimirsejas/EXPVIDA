@@ -5,6 +5,7 @@ Executar com: python -m unittest test_classificacao_causas
 import unittest
 
 from causas_sim import grupo_causa
+from causas_municipio import causa
 
 
 class TestClassificacaoCausas(unittest.TestCase):
@@ -19,6 +20,12 @@ class TestClassificacaoCausas(unittest.TestCase):
 
     def test_marcador_covid_em_parte_ii_nao_substitui_causa_basica(self):
         self.assertEqual(grupo_causa(b"E119", [b"E119", b"U071"]), "endocrinas_nutricionais")
+
+    def test_causa_municipal_b342_com_marcador(self):
+        self.assertEqual(causa(b"B342", [b"B342 U07.1"]), "covid")
+
+    def test_causa_municipal_b342_sem_marcador(self):
+        self.assertEqual(causa(b"B342", [b"B342"]), "infecciosas")
 
     def test_agressao(self):
         self.assertEqual(grupo_causa(b"X954"), "agressoes")
