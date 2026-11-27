@@ -113,10 +113,16 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
         raise ValueError("group_names precisa ter um nome por grupo")
 
     national_rates = d.sum(axis=0) / py.sum(axis=0)[:, None]
+    local_rates = d / py[:, :, None]
+    base_total_rates = local_rates.sum(axis=2)
+    delta_rates = (national_rates[None, :, :] - local_rates).reshape(-1, k)
     n_masks = 1 << k
     values = np.empty(n_masks, dtype=float)
     for mask in range(n_masks):
-        values[mask] = variance_e0_80(d, py, sex, national_rates, mask)[0]
+        bits = np.fromiter(((mask >> j) & 1 for j in range(k)), dtype=float, count=k)
+        total_rates = base_total_rates + (delta_rates @ bits).reshape(n, ages)
+        e = _life_e0_80(total_rates[:, :17], py[:, :17], sex)
+        values[mask] = np.var(e, ddof=0)
 
     base, fully_equalized = values[0], values[-1]
     contributions = np.zeros(k, dtype=float)
