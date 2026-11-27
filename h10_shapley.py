@@ -123,7 +123,7 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
     for mask in range(n_masks):
         bits = np.fromiter(((mask >> j) & 1 for j in range(k)), dtype=float, count=k)
         total_rates = base_total_rates + (delta_rates @ bits).reshape(n, ages)
-        e = _life_e0_80(total_rates[:, :17], py[:, :17], sex)
+        e = _life_e0_80(total_rates[:, :17], sex)
         values[mask] = np.var(e, ddof=0)
 
     base, fully_equalized = values[0], values[-1]
