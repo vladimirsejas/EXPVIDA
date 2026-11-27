@@ -1,1 +1,7 @@
 __pycache__/
+
+# grandes demais para o GitHub (ficam so no notebook)
+CAUSAS_MUNICIPIO.csv
+CAUSAS_RACA_ESCOLARIDADE.csv
+CENSO2022_SOCIO_MUNICIPIOS.csv
+IBGE_SOCIOECONOMICO_MUNICIPIOS.csv

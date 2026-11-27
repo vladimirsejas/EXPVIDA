@@ -1,0 +1,12 @@
+Parte 1 de 2: Censo 2022 (renda, alfabetizacao, saneamento)
+Tabela 10295 ok (512440 linhas): Moradores em domicílios particulares permanentes ocupados, exclusive os cuja condição no d
+Tabela 10296 ok (133680 linhas): Moradores em domicílios particulares permanentes ocupados, exclusive os cuja condição no d
+Tabela 10297 ok (33420 linhas): Participação percentual na composição do rendimento nominal mensal domiciliar dos moradore
+Tabela 10281 ok (133680 linhas): Pessoas de 14 anos ou mais de idade, ocupadas na semana de referência com rendimento de tr
+Tabela 9543 ok (334200 linhas): Taxa de alfabetização das pessoas de 15 anos ou mais de idade por sexo, cor ou raça e grup
+Tabela 6803 ok (200520 linhas): Domicílios particulares permanentes ocupados, por existência de ligação à rede geral de di
+Tabela 6805 ok (111400 linhas): Domicílios particulares permanentes ocupados, por tipo de esgotamento sanitário
+Tabela 6892 ok (89120 linhas): Domicílios particulares permanentes ocupados, por destino do lixo
+Tabela 6806 ok (111400 linhas): Domicílios particulares permanentes ocupados, por existência de banheiro ou sanitário e nú
+Parte 2 de 2: CNES (equipes de saude)
+CNES: 0 linhas gravadas

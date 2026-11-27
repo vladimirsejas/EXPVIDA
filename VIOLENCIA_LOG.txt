@@ -1,0 +1,4 @@
+Parte 1 de 2: Sinesp (Ministerio da Justica)
+Sinesp: catalogo do dados.mj.gov.br falhou: <urlopen error [Errno 11001] getaddrinfo failed>
+Parte 2 de 2: SIM ano a ano
+SIM anual gravado.
