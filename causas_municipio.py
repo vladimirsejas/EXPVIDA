@@ -17,7 +17,7 @@ Causas (CAUSABAS, CID-10), mutuamente exclusivas:
   transito_pedestre V01-V09 | transito_ciclista V10-V19 | transito_moto V20-V29 | transito_automovel V40-V49
   transito_pesado V60-V79 | transito_outros (demais V01-V99)
   afogamento W65-W74 | quedas W00-W19 | acidentes_outros (demais W00-X59) | externas_outras (demais V-Y)
-  covid U07 ou B34.2 + marcador U07.1/U07.2 | infecciosas A00-B99 | neoplasias C00-D48 | diabetes E10-E14 | endocrinas_outras (demais E)
+  covid U07.1/U07.2 ou B34.2 + marcador U07.1/U07.2 | infecciosas A00-B99 | neoplasias C00-D48 | diabetes E10-E14 | endocrinas_outras (demais E)
   isquemicas I20-I25 | cerebrovasculares I60-I69 | hipertensivas I10-I15 | circulatorias_outras (demais I)
   pneumonia_influenza J09-J18 | respiratorias_cronicas J40-J47 | respiratorias_outras (demais J)
   demencias F00-F03 e G30 | renais N17-N19 | alcool F10, K70, X45 | digestivas_outras (demais K)
