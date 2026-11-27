@@ -119,7 +119,7 @@ def contar(dbf, mapa):
     c0, c1 = pos["CAUSABAS"]
     campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII")]
     cont = defaultdict(int)
-    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "municipio_ign": 0, "sem_causa": 0}
+    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "municipio_ign": 0, "sem_causa": 0, "b342_com_u07": 0, "b342_sem_u07": 0, "u07_basica": 0}
     grupos_idade, grupos_causa = {}, {}
     base = tam_cab
     fim = len(dbf)
@@ -147,6 +147,11 @@ def contar(dbf, mapa):
                         cb = dbf[base + c0:base + c1].strip()
                         marcadores = [dbf[base + a:base + b].strip() for a, b in campos_linhas]
                         tem_marcador = any("U071" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") or "U072" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") for v in marcadores)
+                        cb_norm = cb.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "")
+                        if cb_norm.startswith("B342"):
+                            q["b342_com_u07" if tem_marcador else "b342_sem_u07"] += 1
+                        elif cb_norm.startswith("U07"):
+                            q["u07_basica"] += 1
                         chave = (cb, tem_marcador)
                         gc = grupos_causa.get(chave)
                         if gc is None:
@@ -198,7 +203,7 @@ def principal():
         r = be._ler_pickle(os.path.join(CACHE, "causas_%s_%d.pkl" % (uf, a)))
         for k, v in r["cont"].items():
             soma[k] += v
-        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa")])
+        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica")])
     with open(os.path.join(PASTA, "CAUSAS_OBITOS_2015_2019.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["microrregiao", "sexo", "idade_inicio", "causa", "obitos"])
@@ -206,7 +211,7 @@ def principal():
             w.writerow([mic, sx, inv_idade(g), gc, n])
     with open(os.path.join(PASTA, "CAUSAS_QUALIDADE.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa"])
+        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica"])
         w.writerows(qual)
     import shutil
     shutil.rmtree(CACHE, ignore_errors=True)
