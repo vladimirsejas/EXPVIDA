@@ -189,7 +189,7 @@ def contar(dbf):
     e01 = pos.get("ESC")
     cont = defaultdict(int)
     rac = defaultdict(int)
-    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "sem_causa": 0, "racacor_ign": 0, "esc_ign": 0}
+    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "sem_causa": 0, "racacor_ign": 0, "esc_ign": 0, "b342_com_u07": 0, "b342_sem_u07": 0, "u07_basica": 0}
     gi, gc = {}, {}
     base, fim = tam_cab, len(dbf)
     for _ in range(n_reg):
@@ -213,6 +213,11 @@ def contar(dbf):
                     cb = dbf[base + c0:base + c1].strip()
                     marcadores = [dbf[base + a:base + b].strip() for a, b in campos_linhas]
                     tem_marcador = any("U071" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") or "U072" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") for v in marcadores)
+                    cb_norm = cb.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "")
+                    if cb_norm.startswith("B342"):
+                        q["b342_com_u07" if tem_marcador else "b342_sem_u07"] += 1
+                    elif cb_norm.startswith("U07"):
+                        q["u07_basica"] += 1
                     chave = (cb, tem_marcador)
                     c = gc.get(chave)
                     if c is None:
@@ -301,7 +306,7 @@ def principal():
             for (mun, sx, fx, ca, var, cat), n in r["rac"].items():
                 rac[(per, mapa.get(mun, "ignorado"), sx, fx, ca, var, cat)] += n
             qq = r["q"]
-            qual.append([uf, a] + [qq[k] for k in ("total", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign")])
+            qual.append([uf, a] + [qq[k] for k in ("total", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign", "b342_com_u07", "b342_sem_u07", "u07_basica")])
     with open(os.path.join(PASTA, "CAUSAS_MUNICIPIO.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["periodo", "municipio", "sexo", "faixa", "causa", "obitos"])
@@ -319,7 +324,7 @@ def principal():
             w.writerow([per, mic, sx, FAIXAS[fx], ca, var, cat, n])
     with open(os.path.join(PASTA, "CAUSAS_MUNICIPIO_QUALIDADE.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign"])
+        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign", "b342_com_u07", "b342_sem_u07", "u07_basica"])
         w.writerows(qual)
     shutil.rmtree(CACHE, ignore_errors=True)
     print("\nPronto (%.0f min). Gravados CAUSAS_MUNICIPIO.csv, POP_MUNICIPIO.csv, CAUSAS_RACA_ESCOLARIDADE.csv e "
