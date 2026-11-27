@@ -42,9 +42,9 @@ Sobre a pergunta "o SUS é eficiente?", estes dados não medem eficiência, porq
 
 Entre os óbitos por agressão, 75,1% foram de pessoas pretas ou pardas (só 2,1% sem raça/cor informada). Entre os suicídios, a proporção de pessoas brancas (48,1%) é parecida com a de pretas e pardas (49,0%). Entre os óbitos por agressão, 54,8% foram de pessoas com até sete anos de estudo. A escolaridade não está informada em cerca de um quinto dos óbitos, por isso esses números são perfis, não taxas: o SIM não traz população por raça/cor em cada município, e sem ela não há denominador.
 
-### Uma nota sobre a COVID
+### Uma nota sobre a COVID — classificação em revisão
 
-O SIM registra a COVID-19 como causa básica com o código B34.2, que fica dentro das doenças infecciosas, e não com U07. Por isso, no arquivo CAUSAS_MUNICIPIO.csv, ela está somada às infecciosas. Para separá-la, bastaria mudar uma linha no programa e rodar de novo.
+A codificação oficial brasileira usa B34.2 combinado com o marcador U07.1 (vírus identificado) ou U07.2 (vírus não identificado/critério clínico-epidemiológico). B34.2 isolado significa infecção por coronavírus de localização não especificada e não identifica, sozinho, COVID-19. A extração municipal original classificava códigos U07 diretamente, mas não consultava os marcadores U07 nas linhas LINHAA-D/LINHAII quando a causa básica era B34.2. Portanto, a separação atual de COVID pode estar incompleta. A classificação foi corrigida em branch de auditoria; os resultados municipais devem ser reextraídos e recalculados antes de manter qualquer afirmação quantitativa específica sobre COVID. Fonte: Ministério da Saúde, Orientações para codificação das causas de morte relacionadas à COVID-19.
 
 ## Possíveis histórias para o artigo (a escolha é sua)
 
