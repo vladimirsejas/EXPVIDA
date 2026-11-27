@@ -17,7 +17,7 @@ import causas_sim as cs
 PERIODOS = {"2000-2004": range(2000, 2005), "2005-2009": range(2005, 2010), "2010-2014": range(2010, 2015),
             "2020-2021 pandemia": range(2020, 2022), "2022-2024": range(2022, 2025)}
 ANO_PER = {a: p for p, r in PERIODOS.items() for a in r}
-cs.CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache2_v2")
+cs.CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache2_v3")
 
 
 def principal():
@@ -42,13 +42,13 @@ def principal():
         r = be._ler_pickle(os.path.join(cs.CACHE, "causas_%s_%d.pkl" % (uf, a)))
         for (mic, sx, g, gc), n in r["cont"].items():
             soma[(ANO_PER[a], mic, sx, g, gc)] += n
-        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica")])
+        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica")])
     with open(os.path.join(cs.PASTA, "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";"); w.writerow(["periodo", "microrregiao", "sexo", "idade_inicio", "causa", "obitos"])
         for (p, mic, sx, g, gc), n in sorted(soma.items()):
             w.writerow([p, mic, sx, cs.inv_idade(g), gc, n])
     with open(os.path.join(cs.PASTA, "CAUSAS_QUALIDADE_OUTROS.csv"), "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f, delimiter=";"); w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica"]); w.writerows(qual)
+        w = csv.writer(f, delimiter=";"); w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica"]); w.writerows(qual)
     shutil.rmtree(cs.CACHE, ignore_errors=True)
     print("\nPronto. Gravados CAUSAS_OBITOS_OUTROS_PERIODOS.csv e CAUSAS_QUALIDADE_OUTROS.csv. Pode fechar.")
 

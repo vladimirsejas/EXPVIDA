@@ -42,7 +42,49 @@ CAUSE_GROUP = {
     "sem_causa": "sem_causa",
 }
 CAUSE_GROUPS = tuple(dict.fromkeys(CAUSE_GROUP.values()))
+CAUSE_GROUP_VIOLENCIA_DETALHADA = {
+    "agressoes": "agressoes_intervencao_legal",
+    "intervencao_legal": "agressoes_intervencao_legal",
+    "intencao_indeterminada": "intencao_indeterminada",
+    "suicidio": "suicidio",
+    "transporte": "transporte",
+    "acidentes_outros": "externas_demais",
+    "externas_outras": "externas_demais",
+    "covid19": "covid19",
+    "infecciosas": "infecciosas_sem_covid",
+    "neoplasias": "neoplasias",
+    "circulatorias": "circulatorias",
+    "respiratorias": "respiratorias",
+    "mal_definidas": "mal_definidas_sem_causa",
+    "sem_causa": "mal_definidas_sem_causa",
+    "endocrinas_nutricionais": "demais_doencas",
+    "digestivas": "demais_doencas",
+    "perinatais": "demais_doencas",
+    "congenitas": "demais_doencas",
+    "outras_doencas": "demais_doencas",
+}
+CAUSE_GROUPINGS = {
+    "atual": CAUSE_GROUP,
+    "violencia_detalhada": CAUSE_GROUP_VIOLENCIA_DETALHADA,
+}
+CAUSE_GROUPS_BY_NAME = {
+    name: tuple(dict.fromkeys(mapping.values()))
+    for name, mapping in CAUSE_GROUPINGS.items()
+}
 AGE_WIDTHS = np.array([1, 4] + [5] * 15 + [None], dtype=object)
+
+
+def agrupar_categorias_causa(part, agrupamento="atual"):
+    """Mapeia e agrega categorias originais usando um agrupamento nomeado."""
+    if agrupamento not in CAUSE_GROUPINGS:
+        raise ValueError(f"Agrupamento desconhecido: {agrupamento}")
+    mapping = CAUSE_GROUPINGS[agrupamento]
+    unknown = sorted(set(part.causa) - set(mapping))
+    if unknown:
+        raise ValueError(f"Categorias de causa sem mapeamento: {unknown}")
+    mapped = part.copy()
+    mapped["grupo_h10"] = mapped.causa.map(mapping)
+    return mapped.groupby(["microrregiao", "idade_inicio", "grupo_h10"], as_index=False).obitos.sum()
 
 
 def _life_e0_80(mortality_rates, sex):
@@ -151,7 +193,7 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
     }
 
 
-def load_period_sex(data_dir, period, sex):
+def load_period_sex(data_dir, period, sex, agrupamento="atual"):
     """Carrega dados versionados do EXPVIDA e prepara tensor de causas e exposição."""
     data_dir = Path(data_dir)
     d1 = pd.read_csv(data_dir / "CAUSAS_OBITOS_2015_2019.csv", sep=";", dtype={"microrregiao": str})
@@ -162,16 +204,15 @@ def load_period_sex(data_dir, period, sex):
     if (period, sex) not in D:
         raise ValueError(f"Período/sexo não encontrado na base geral: {period}, {sex}")
     py = PY[(period, sex)]
-    deaths = np.zeros((len(codes), len(dm.IDADES), len(CAUSE_GROUPS)), dtype=float)
+    if agrupamento not in CAUSE_GROUPINGS:
+        raise ValueError(f"Agrupamento desconhecido: {agrupamento}")
+    group_names = CAUSE_GROUPS_BY_NAME[agrupamento]
+    deaths = np.zeros((len(codes), len(dm.IDADES), len(group_names)), dtype=float)
     code_idx = {str(code): i for i, code in enumerate(codes)}
     age_idx = {int(age): i for i, age in enumerate(dm.IDADES)}
-    group_idx = {name: i for i, name in enumerate(CAUSE_GROUPS)}
+    group_idx = {name: i for i, name in enumerate(group_names)}
     part = causes[(causes.periodo == period) & (causes.sexo.astype(int) == int(sex))].copy()
-    unknown = sorted(set(part.causa) - set(CAUSE_GROUP))
-    if unknown:
-        raise ValueError(f"Categorias de causa sem mapeamento: {unknown}")
-    part["grupo_h10"] = part.causa.map(CAUSE_GROUP)
-    agg = part.groupby(["microrregiao", "idade_inicio", "grupo_h10"], as_index=False).obitos.sum()
+    agg = agrupar_categorias_causa(part, agrupamento)
     for row in agg.itertuples(index=False):
         i = code_idx.get(str(row.microrregiao))
         a = age_idx.get(int(row.idade_inicio))
@@ -188,11 +229,11 @@ def load_period_sex(data_dir, period, sex):
         "cells_with_difference": int(np.count_nonzero(np.abs(difference) > 0)),
         "max_abs_cell_difference": float(np.max(np.abs(difference))),
     }
-    return deaths, py, list(CAUSE_GROUPS), diagnostics
+    return deaths, py, list(group_names), diagnostics
 
 
-def run_h10(data_dir, period, sex, strict_closure=True):
-    deaths, py, groups, diagnostics = load_period_sex(data_dir, period, sex)
+def run_h10(data_dir, period, sex, strict_closure=True, agrupamento="atual"):
+    deaths, py, groups, diagnostics = load_period_sex(data_dir, period, sex, agrupamento=agrupamento)
     if strict_closure and diagnostics["cells_with_difference"] > 0:
         raise ValueError(
             "As causas não fecham com a base geral. Resolver diferenças antes de estimar H10: "

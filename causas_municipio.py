@@ -45,7 +45,7 @@ import brasil_expectativa as be
 import inventario_sim_ac as inv
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(tempfile.gettempdir(), "expvida_municipio_cache_v2")
+CACHE = os.path.join(tempfile.gettempdir(), "expvida_municipio_cache_v3")
 PERIODOS = be.PERIODOS
 ANO_PER = {a: p for p, anos in PERIODOS.items() for a in anos}
 UFS = be.UFS
@@ -178,19 +178,19 @@ def _cat(valor, validos):
 def contar(dbf):
     n_reg, tam_cab, tam_reg, cols = inv.ler_dbf(dbf)
     pos = {nome: (a, b) for nome, a, b in cols}
-    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS", "LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII"):
+    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS"):
         if nome not in pos:
             raise RuntimeError("coluna %s ausente no arquivo" % nome)
     s0, s1 = pos["SEXO"]
     i0, i1 = pos["IDADE"]
     m0, m1 = pos["CODMUNRES"]
     c0, c1 = pos["CAUSABAS"]
-    campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII")]
+    campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII") if n in pos]
     r01 = pos.get("RACACOR")
     e01 = pos.get("ESC")
     cont = defaultdict(int)
     rac = defaultdict(int)
-    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "sem_causa": 0, "racacor_ign": 0, "esc_ign": 0, "b342_com_u07": 0, "b342_sem_u07": 0, "u07_basica": 0}
+    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "sem_causa": 0, "racacor_ign": 0, "esc_ign": 0, "sem_colunas_linhas": 0, "b342_com_u07": 0, "b342_sem_u07": 0, "u07_basica": 0}
     gi, gc = {}, {}
     base, fim = tam_cab, len(dbf)
     for _ in range(n_reg):
@@ -198,6 +198,8 @@ def contar(dbf):
             break
         if dbf[base] != 0x2A:
             q["total"] += 1
+            if len(campos_linhas) < 5:
+                q["sem_colunas_linhas"] += 1
             sx = dbf[base + s0:base + s1].strip()
             if sx != b"1" and sx != b"2":
                 q["sexo_ign"] += 1
@@ -307,7 +309,7 @@ def principal():
             for (mun, sx, fx, ca, var, cat), n in r["rac"].items():
                 rac[(per, mapa.get(mun, "ignorado"), sx, fx, ca, var, cat)] += n
             qq = r["q"]
-            qual.append([uf, a] + [qq[k] for k in ("total", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign", "b342_com_u07", "b342_sem_u07", "u07_basica")])
+            qual.append([uf, a] + [qq[k] for k in ("total", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica")])
     with open(os.path.join(PASTA, "CAUSAS_MUNICIPIO.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["periodo", "municipio", "sexo", "faixa", "causa", "obitos"])
@@ -325,7 +327,7 @@ def principal():
             w.writerow([per, mic, sx, FAIXAS[fx], ca, var, cat, n])
     with open(os.path.join(PASTA, "CAUSAS_MUNICIPIO_QUALIDADE.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign", "b342_com_u07", "b342_sem_u07", "u07_basica"])
+        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ign", "idade_ign", "sem_causa", "racacor_ign", "esc_ign", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica"])
         w.writerows(qual)
     shutil.rmtree(CACHE, ignore_errors=True)
     print("\nPronto (%.0f min). Gravados CAUSAS_MUNICIPIO.csv, POP_MUNICIPIO.csv, CAUSAS_RACA_ESCOLARIDADE.csv e "

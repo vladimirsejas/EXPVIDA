@@ -35,7 +35,7 @@ import brasil_expectativa as be
 import inventario_sim_ac as inv
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache_v2")
+CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache_v3")
 ANOS = (2015, 2016, 2017, 2018, 2019)
 UFS = be.UFS
 PROCESSOS = be.PROCESSOS
@@ -111,16 +111,16 @@ def carregar_mapa():
 def contar(dbf, mapa):
     n_reg, tam_cab, tam_reg, cols = inv.ler_dbf(dbf)
     pos = {nome: (a, b) for nome, a, b in cols}
-    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS", "LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII"):
+    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS"):
         if nome not in pos:
             raise RuntimeError("coluna %s ausente no arquivo" % nome)
     s0, s1 = pos["SEXO"]
     i0, i1 = pos["IDADE"]
     m0, m1 = pos["CODMUNRES"]
     c0, c1 = pos["CAUSABAS"]
-    campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII")]
+    campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII") if n in pos]
     cont = defaultdict(int)
-    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "municipio_ign": 0, "sem_causa": 0, "b342_com_u07": 0, "b342_sem_u07": 0, "u07_basica": 0}
+    q = {"total": 0, "sexo_ign": 0, "idade_ign": 0, "municipio_ign": 0, "sem_causa": 0, "sem_colunas_linhas": 0, "b342_com_u07": 0, "b342_sem_u07": 0, "u07_basica": 0}
     grupos_idade, grupos_causa = {}, {}
     base = tam_cab
     fim = len(dbf)
@@ -129,6 +129,8 @@ def contar(dbf, mapa):
             break
         if dbf[base] != 0x2A:
             q["total"] += 1
+            if len(campos_linhas) < 5:
+                q["sem_colunas_linhas"] += 1
             sx = dbf[base + s0:base + s1].strip()
             if sx != b"1" and sx != b"2":
                 q["sexo_ign"] += 1
@@ -204,7 +206,7 @@ def principal():
         r = be._ler_pickle(os.path.join(CACHE, "causas_%s_%d.pkl" % (uf, a)))
         for k, v in r["cont"].items():
             soma[k] += v
-        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica")])
+        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica")])
     with open(os.path.join(PASTA, "CAUSAS_OBITOS_2015_2019.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["microrregiao", "sexo", "idade_inicio", "causa", "obitos"])
@@ -212,7 +214,7 @@ def principal():
             w.writerow([mic, sx, inv_idade(g), gc, n])
     with open(os.path.join(PASTA, "CAUSAS_QUALIDADE.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica"])
+        w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica"])
         w.writerows(qual)
     import shutil
     shutil.rmtree(CACHE, ignore_errors=True)

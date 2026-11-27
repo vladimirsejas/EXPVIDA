@@ -4,8 +4,15 @@ Executar: python -m unittest test_h10_shapley
 """
 import unittest
 import numpy as np
+import pandas as pd
 
-from h10_shapley import shapley_variance
+from h10_shapley import (
+    CAUSE_GROUP,
+    CAUSE_GROUPINGS,
+    CAUSE_GROUPS_BY_NAME,
+    agrupar_categorias_causa,
+    shapley_variance,
+)
 
 
 class TestH10Shapley(unittest.TestCase):
@@ -22,6 +29,64 @@ class TestH10Shapley(unittest.TestCase):
             deaths[i, :, 1] = np.round(rates_b * py[i])
         self.deaths = deaths
         self.py = py
+
+    def test_agrupamentos_preservam_categorias_obitos_e_fechamento(self):
+        categorias = list(next(iter(CAUSE_GROUPINGS.values())))
+        self.assertEqual(len(categorias), 19)
+        self.assertEqual(CAUSE_GROUPINGS["atual"], CAUSE_GROUP)
+        self.assertEqual(len(CAUSE_GROUPS_BY_NAME["violencia_detalhada"]), 12)
+        esperado_detalhado = {
+            "agressoes_intervencao_legal": {"agressoes", "intervencao_legal"},
+            "intencao_indeterminada": {"intencao_indeterminada"},
+            "suicidio": {"suicidio"},
+            "transporte": {"transporte"},
+            "externas_demais": {"acidentes_outros", "externas_outras"},
+            "covid19": {"covid19"},
+            "infecciosas_sem_covid": {"infecciosas"},
+            "neoplasias": {"neoplasias"},
+            "circulatorias": {"circulatorias"},
+            "respiratorias": {"respiratorias"},
+            "mal_definidas_sem_causa": {"mal_definidas", "sem_causa"},
+            "demais_doencas": {
+                "endocrinas_nutricionais", "digestivas", "perinatais", "congenitas", "outras_doencas"
+            },
+        }
+        agrupamento_detalhado = CAUSE_GROUPINGS["violencia_detalhada"]
+        self.assertEqual(
+            {grupo: {causa for causa, alvo in agrupamento_detalhado.items() if alvo == grupo}
+             for grupo in CAUSE_GROUPS_BY_NAME["violencia_detalhada"]},
+            esperado_detalhado,
+        )
+        for nome, mapping in CAUSE_GROUPINGS.items():
+            with self.subTest(agrupamento=nome):
+                self.assertEqual(set(mapping), set(categorias))
+                self.assertEqual(len(mapping), len(categorias))
+
+                linhas = []
+                for territorio in range(4):
+                    for idade in range(18):
+                        for j, categoria in enumerate(categorias):
+                            linhas.append({
+                                "microrregiao": str(territorio),
+                                "idade_inicio": idade,
+                                "causa": categoria,
+                                "obitos": 1 + territorio * (j + 1) + idade % 3,
+                            })
+                original = pd.DataFrame(linhas)
+                agrupado = agrupar_categorias_causa(original, nome)
+                self.assertEqual(float(agrupado.obitos.sum()), float(original.obitos.sum()))
+
+                grupos = CAUSE_GROUPS_BY_NAME[nome]
+                group_idx = {grupo: i for i, grupo in enumerate(grupos)}
+                deaths = np.zeros((4, 18, len(grupos)), dtype=float)
+                for row in agrupado.itertuples(index=False):
+                    deaths[int(row.microrregiao), int(row.idade_inicio), group_idx[row.grupo_h10]] = row.obitos
+                resultado = shapley_variance(deaths, self.py, 1, list(grupos))
+                self.assertAlmostEqual(
+                    float(resultado["contributions"].sum()),
+                    resultado["variance_observed"] - resultado["variance_all_causes_equalized"],
+                    places=12,
+                )
 
     def test_shapley_closes(self):
         r = shapley_variance(self.deaths, self.py, 1, ["causa_variavel", "causa_constante"])

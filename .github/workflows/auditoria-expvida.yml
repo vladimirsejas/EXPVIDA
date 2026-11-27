@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - auditoria-chatgpt-2026-11-27
+      - codex-preparo-h10
   pull_request:
     branches:
       - main

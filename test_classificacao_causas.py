@@ -3,12 +3,58 @@
 Executar com: python -m unittest test_classificacao_causas
 """
 import unittest
+import struct
 
-from causas_sim import grupo_causa
-from causas_municipio import causa
+from causas_sim import contar as contar_sim, grupo_causa
+from causas_municipio import causa, contar as contar_municipio
+
+
+def dbf_sintetico(campos, registros):
+    """Monta um DBF dBase III pequeno em memória para os testes."""
+    descritores = bytearray()
+    tamanho_registro = 1
+    for nome, largura in campos:
+        descritor = bytearray(32)
+        descritor[:len(nome)] = nome.encode("ascii")
+        descritor[11] = ord("C")
+        descritor[16] = largura
+        descritores.extend(descritor)
+        tamanho_registro += largura
+    tamanho_cabecalho = 32 + len(descritores) + 1
+    cabecalho = bytearray(32)
+    cabecalho[0] = 3
+    cabecalho[4:8] = struct.pack("<I", len(registros))
+    cabecalho[8:10] = struct.pack("<H", tamanho_cabecalho)
+    cabecalho[10:12] = struct.pack("<H", tamanho_registro)
+    saida = cabecalho + descritores + b"\x0d"
+    for registro in registros:
+        saida.extend(b" ")
+        for (nome, largura), valor in zip(campos, registro):
+            saida.extend(valor.encode("ascii").ljust(largura)[:largura])
+    return bytes(saida) + b"\x1a"
 
 
 class TestClassificacaoCausas(unittest.TestCase):
+    def test_contar_sem_colunas_de_linhas(self):
+        campos = [("SEXO", 1), ("IDADE", 3), ("CODMUNRES", 6), ("CAUSABAS", 4)]
+        dbf = dbf_sintetico(campos, [
+            ("1", "400", "123456", "B342"),
+            ("2", "400", "123456", "U071"),
+        ])
+
+        resultado_sim = contar_sim(dbf, {"123456": "micro"})
+        self.assertEqual(resultado_sim["cont"][("micro", "1", 0, "infecciosas")], 1)
+        self.assertEqual(resultado_sim["cont"][("micro", "2", 0, "covid19")], 1)
+        self.assertEqual(resultado_sim["q"]["sem_colunas_linhas"], 2)
+        self.assertEqual(resultado_sim["q"]["b342_sem_u07"], 1)
+        self.assertEqual(resultado_sim["q"]["total"], 2)
+
+        resultado_municipio = contar_municipio(dbf)
+        self.assertEqual(resultado_municipio["cont"][("123456", "1", 0, "infecciosas")], 1)
+        self.assertEqual(resultado_municipio["cont"][("123456", "2", 0, "covid")], 1)
+        self.assertEqual(resultado_municipio["q"]["sem_colunas_linhas"], 2)
+        self.assertEqual(resultado_municipio["q"]["b342_sem_u07"], 1)
+
     def test_covid_confirmada_com_marcador_u071(self):
         self.assertEqual(grupo_causa(b"B342", [b"B342 U071"]), "covid19")
 
