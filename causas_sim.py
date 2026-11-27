@@ -17,8 +17,8 @@ A ligacao municipio-microrregiao vem de MUNICIPIO_MICRORREGIAO.csv (na mesma pas
 tabela_municipio_microrregiao.py).
 
 Grava na pasta do script, SO DUAS TABELAS PEQUENAS (nenhum registro individual e guardado):
-  CAUSAS_OBITOS_2015_2019.csv   microrregiao;sexo;idade_inicio;causa;obitos
-  CAUSAS_QUALIDADE.csv          por UF e ano: total de obitos lidos, ignorados por sexo, idade e municipio, sem causa
+  CAUSAS_OBITOS_2015_2019_V2.csv microrregiao;sexo;idade_inicio;causa;obitos
+  CAUSAS_QUALIDADE_V2.csv        por UF e ano: total de obitos lidos, ignorados por sexo, idade e municipio, sem causa
 Nao altera nenhum arquivo do EXPVIDA. Nao envia nada para a internet alem do download do DATASUS.
 """
 import concurrent.futures
@@ -207,18 +207,18 @@ def principal():
         for k, v in r["cont"].items():
             soma[k] += v
         qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica")])
-    with open(os.path.join(PASTA, "CAUSAS_OBITOS_2015_2019.csv"), "w", encoding="utf-8", newline="") as f:
+    with open(os.path.join(PASTA, "CAUSAS_OBITOS_2015_2019_V2.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["microrregiao", "sexo", "idade_inicio", "causa", "obitos"])
         for (mic, sx, g, gc), n in sorted(soma.items()):
             w.writerow([mic, sx, inv_idade(g), gc, n])
-    with open(os.path.join(PASTA, "CAUSAS_QUALIDADE.csv"), "w", encoding="utf-8", newline="") as f:
+    with open(os.path.join(PASTA, "CAUSAS_QUALIDADE_V2.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica"])
         w.writerows(qual)
     import shutil
     shutil.rmtree(CACHE, ignore_errors=True)
-    print("\nPronto. Gravados CAUSAS_OBITOS_2015_2019.csv e CAUSAS_QUALIDADE.csv. Pode fechar.")
+    print("\nPronto. Gravados CAUSAS_OBITOS_2015_2019_V2.csv e CAUSAS_QUALIDADE_V2.csv. Pode fechar.")
 
 
 def inv_idade(g):

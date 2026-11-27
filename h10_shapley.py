@@ -87,6 +87,18 @@ def agrupar_categorias_causa(part, agrupamento="atual"):
     return mapped.groupby(["microrregiao", "idade_inicio", "grupo_h10"], as_index=False).obitos.sum()
 
 
+def arquivos_causas(versao_causas="v1"):
+    """Retorna os arquivos de contagens SIM correspondentes à versão solicitada."""
+    arquivos = {
+        "v1": ("CAUSAS_OBITOS_2015_2019.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"),
+        "v2": ("CAUSAS_OBITOS_2015_2019_V2.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"),
+    }
+    try:
+        return arquivos[versao_causas]
+    except (KeyError, TypeError):
+        raise ValueError(f"Versão de causas desconhecida: {versao_causas}") from None
+
+
 def _life_e0_80(mortality_rates, sex):
     """Calcula e0-80 a partir de taxas centrais de mortalidade por idade."""
     m = np.asarray(mortality_rates, dtype=float)
@@ -193,12 +205,13 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
     }
 
 
-def load_period_sex(data_dir, period, sex, agrupamento="atual"):
+def load_period_sex(data_dir, period, sex, agrupamento="atual", versao_causas="v1"):
     """Carrega dados versionados do EXPVIDA e prepara tensor de causas e exposição."""
     data_dir = Path(data_dir)
-    d1 = pd.read_csv(data_dir / "CAUSAS_OBITOS_2015_2019.csv", sep=";", dtype={"microrregiao": str})
+    arquivo_2015_2019, arquivo_outros_periodos = arquivos_causas(versao_causas)
+    d1 = pd.read_csv(data_dir / arquivo_2015_2019, sep=";", dtype={"microrregiao": str})
     d1.insert(0, "periodo", "2015-2019")
-    d2 = pd.read_csv(data_dir / "CAUSAS_OBITOS_OUTROS_PERIODOS.csv", sep=";", dtype={"microrregiao": str})
+    d2 = pd.read_csv(data_dir / arquivo_outros_periodos, sep=";", dtype={"microrregiao": str})
     causes = pd.concat([d1, d2], ignore_index=True)
     D, PY, codes = dm.carregar()
     if (period, sex) not in D:
@@ -232,8 +245,10 @@ def load_period_sex(data_dir, period, sex, agrupamento="atual"):
     return deaths, py, list(group_names), diagnostics
 
 
-def run_h10(data_dir, period, sex, strict_closure=True, agrupamento="atual"):
-    deaths, py, groups, diagnostics = load_period_sex(data_dir, period, sex, agrupamento=agrupamento)
+def run_h10(data_dir, period, sex, strict_closure=True, agrupamento="atual", versao_causas="v1"):
+    deaths, py, groups, diagnostics = load_period_sex(
+        data_dir, period, sex, agrupamento=agrupamento, versao_causas=versao_causas
+    )
     if strict_closure and diagnostics["cells_with_difference"] > 0:
         raise ValueError(
             "As causas não fecham com a base geral. Resolver diferenças antes de estimar H10: "

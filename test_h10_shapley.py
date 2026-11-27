@@ -11,6 +11,7 @@ from h10_shapley import (
     CAUSE_GROUPINGS,
     CAUSE_GROUPS_BY_NAME,
     agrupar_categorias_causa,
+    arquivos_causas,
     shapley_variance,
 )
 
@@ -29,6 +30,18 @@ class TestH10Shapley(unittest.TestCase):
             deaths[i, :, 1] = np.round(rates_b * py[i])
         self.deaths = deaths
         self.py = py
+
+    def test_versoes_de_arquivos_de_causas(self):
+        self.assertEqual(
+            arquivos_causas("v1"),
+            ("CAUSAS_OBITOS_2015_2019.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"),
+        )
+        self.assertEqual(
+            arquivos_causas("v2"),
+            ("CAUSAS_OBITOS_2015_2019_V2.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"),
+        )
+        with self.assertRaises(ValueError):
+            arquivos_causas("v3")
 
     def test_agrupamentos_preservam_categorias_obitos_e_fechamento(self):
         categorias = list(next(iter(CAUSE_GROUPINGS.values())))

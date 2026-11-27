@@ -4,7 +4,7 @@ Como usar: abra este arquivo no VS Code e clique em "Run Python File". Nada mais
 Faz o mesmo que causas_sim.py (mesmas funcoes, mesmos grupos de causa), para os anos que faltam:
 2000-2014 e 2020-2024 (2015-2019 ja foi feito). Os arquivos baixados ficam numa pasta temporaria do Windows, apagada no fim;
 se parar, rode de novo e continua de onde parou.
-Grava CAUSAS_OBITOS_OUTROS_PERIODOS.csv (periodo;microrregiao;sexo;idade_inicio;causa;obitos) e CAUSAS_QUALIDADE_OUTROS.csv.
+Grava CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv (periodo;microrregiao;sexo;idade_inicio;causa;obitos) e CAUSAS_QUALIDADE_OUTROS_V2.csv.
 Nao altera nenhum arquivo do EXPVIDA.
 """
 import concurrent.futures, csv, os, shutil, sys, tempfile, time
@@ -43,14 +43,14 @@ def principal():
         for (mic, sx, g, gc), n in r["cont"].items():
             soma[(ANO_PER[a], mic, sx, g, gc)] += n
         qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica")])
-    with open(os.path.join(cs.PASTA, "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"), "w", encoding="utf-8", newline="") as f:
+    with open(os.path.join(cs.PASTA, "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";"); w.writerow(["periodo", "microrregiao", "sexo", "idade_inicio", "causa", "obitos"])
         for (p, mic, sx, g, gc), n in sorted(soma.items()):
             w.writerow([p, mic, sx, cs.inv_idade(g), gc, n])
-    with open(os.path.join(cs.PASTA, "CAUSAS_QUALIDADE_OUTROS.csv"), "w", encoding="utf-8", newline="") as f:
+    with open(os.path.join(cs.PASTA, "CAUSAS_QUALIDADE_OUTROS_V2.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";"); w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "sem_colunas_linhas", "b342_com_u07", "b342_sem_u07", "u07_basica"]); w.writerows(qual)
     shutil.rmtree(cs.CACHE, ignore_errors=True)
-    print("\nPronto. Gravados CAUSAS_OBITOS_OUTROS_PERIODOS.csv e CAUSAS_QUALIDADE_OUTROS.csv. Pode fechar.")
+    print("\nPronto. Gravados CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv e CAUSAS_QUALIDADE_OUTROS_V2.csv. Pode fechar.")
 
 
 if __name__ == "__main__":
