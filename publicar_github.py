@@ -1,5 +1,5 @@
 """
-Projeto: EXPVIDA (C:\\EXPVIDA) - envia tudo para o GitHub (vladimirsejas/EXPVIDA), no ramo atual.
+Projeto: EXPVIDA (C:\\EXPVIDA) - envia tudo para o GitHub (vladimirsejas/EXPVIDA), no ramo atual e no ramo main.
 
 Como usar: abra este arquivo no VS Code e clique em "Run Python File". Leva 1 a 5 minutos.
 Arquivos com mais de 90 MB nao vao (o GitHub recusa acima de 100 MB): sao colocados no .gitignore
@@ -45,8 +45,13 @@ cod, _ = git("commit", "-m", "Onda dos homicidios 2000-2024, Censo 2022, CNES e 
              "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
              "Claude-Session: https://claude.ai/code/session_01BHsHXwHKV5kuqGTui3hX9Z")
 cod, saida = git("push", "-u", "origin", ramo)
+if cod == 0 and ramo != "main":
+    # leva o mesmo conteudo para o ramo principal (so avanca, nunca apaga nada no GitHub)
+    cod, saida = git("push", "origin", "HEAD:main")
+    if cod == 0:
+        git("fetch", "origin", "main")
 if cod == 0:
     git("log", "--oneline", "-3")
-    print("\nPronto: tudo enviado para o GitHub, ramo " + ramo + ". Pode fechar.")
+    print("\nPronto: tudo enviado para o GitHub, ramos " + ramo + " e main. Pode fechar.")
 else:
     print("\nATENCAO: o envio falhou. Copie a mensagem acima para o Claude.")
