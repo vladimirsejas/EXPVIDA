@@ -22,6 +22,10 @@ class TestClassificacaoCausas(unittest.TestCase):
     def test_covid_com_marcador_u072(self):
         self.assertEqual(grupo_causa(b"B342", [b"B342", b"U07.2"]), "covid19")
 
+    def test_u073_nao_e_classificado_como_covid(self):
+        self.assertNotEqual(grupo_causa(b"U07.3"), "covid19")
+        self.assertNotEqual(causa(b"U07.3"), "covid")
+
     def test_b342_sem_marcador_nao_e_rotulado_covid(self):
         self.assertEqual(grupo_causa(b"B342", [b"B342"]), "infecciosas")
 
