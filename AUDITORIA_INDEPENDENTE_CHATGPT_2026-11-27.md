@@ -3,6 +3,8 @@
 **Branch:** `auditoria-chatgpt-2026-11-27`  
 **Base inspecionada:** branch `main`, commit `3c753c08070003c4bfcfabe0dce848b78a0a02ae`.
 
+> **ERRATA IMPORTANTE (27/11/2026):** A seção 3 abaixo comparou indevidamente o bootstrap temporal por causas com um adendo referente a uma análise de sensibilidade diferente. A conclusão de divergência necessária entre código e método foi corrigida. Consulte `AUDITORIA_COMPLEMENTAR_IMPLEMENTACAO_2026-11-27.md`, que distingue os procedimentos e registra o achado concreto sobre a classificação de COVID-19.
+
 ## 1. Escopo e limite desta auditoria
 
 Esta é uma auditoria documental e estática feita a partir dos arquivos versionados no GitHub. Foram lidos documentos metodológicos, relatórios de resultados e trechos dos scripts centrais. **Não executei os programas, não abri os arquivos locais de `C:\EXPVIDA` e não validei os CSV linha a linha em ambiente local.** Portanto, os pontos abaixo são achados de leitura de código/documentação e precisam ser confrontados por execução independente quando indicado.
