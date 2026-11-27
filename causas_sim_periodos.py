@@ -42,13 +42,13 @@ def principal():
         r = be._ler_pickle(os.path.join(cs.CACHE, "causas_%s_%d.pkl" % (uf, a)))
         for (mic, sx, g, gc), n in r["cont"].items():
             soma[(ANO_PER[a], mic, sx, g, gc)] += n
-        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa")])
+        qual.append([uf, a] + [r["q"][c] for c in ("total", "sexo_ign", "idade_ign", "municipio_ign", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica")])
     with open(os.path.join(cs.PASTA, "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";"); w.writerow(["periodo", "microrregiao", "sexo", "idade_inicio", "causa", "obitos"])
         for (p, mic, sx, g, gc), n in sorted(soma.items()):
             w.writerow([p, mic, sx, cs.inv_idade(g), gc, n])
     with open(os.path.join(cs.PASTA, "CAUSAS_QUALIDADE_OUTROS.csv"), "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f, delimiter=";"); w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa"]); w.writerows(qual)
+        w = csv.writer(f, delimiter=";"); w.writerow(["uf", "ano", "obitos_lidos", "sexo_ignorado", "idade_ignorada", "municipio_ignorado", "sem_causa", "b342_com_u07", "b342_sem_u07", "u07_basica"]); w.writerows(qual)
     shutil.rmtree(cs.CACHE, ignore_errors=True)
     print("\nPronto. Gravados CAUSAS_OBITOS_OUTROS_PERIODOS.csv e CAUSAS_QUALIDADE_OUTROS.csv. Pode fechar.")
 
