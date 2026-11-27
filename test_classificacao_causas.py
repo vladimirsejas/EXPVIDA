@@ -12,6 +12,9 @@ class TestClassificacaoCausas(unittest.TestCase):
     def test_covid_confirmada_com_marcador_u071(self):
         self.assertEqual(grupo_causa(b"B342", [b"B342 U071"]), "covid19")
 
+    def test_u071_direto(self):
+        self.assertEqual(grupo_causa(b"U071"), "covid19")
+
     def test_covid_com_marcador_u072(self):
         self.assertEqual(grupo_causa(b"B342", [b"B342", b"U07.2"]), "covid19")
 
@@ -23,6 +26,9 @@ class TestClassificacaoCausas(unittest.TestCase):
 
     def test_causa_municipal_b342_com_marcador(self):
         self.assertEqual(causa(b"B342", [b"B342 U07.1"]), "covid")
+
+    def test_causa_municipal_u071_direto(self):
+        self.assertEqual(causa(b"U071"), "covid")
 
     def test_causa_municipal_b342_sem_marcador(self):
         self.assertEqual(causa(b"B342", [b"B342"]), "infecciosas")
