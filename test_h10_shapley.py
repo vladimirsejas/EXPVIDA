@@ -7,11 +7,13 @@ import numpy as np
 import pandas as pd
 
 from h10_shapley import (
+    ARQUIVOS_CAUSAS,
     CAUSE_GROUP,
     CAUSE_GROUPINGS,
     CAUSE_GROUPS_BY_NAME,
     agrupar_categorias_causa,
     arquivos_causas,
+    load_period_sex,
     shapley_variance,
 )
 
@@ -31,17 +33,13 @@ class TestH10Shapley(unittest.TestCase):
         self.deaths = deaths
         self.py = py
 
-    def test_versoes_de_arquivos_de_causas(self):
-        self.assertEqual(
-            arquivos_causas("v1"),
-            ("CAUSAS_OBITOS_2015_2019.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"),
-        )
-        self.assertEqual(
-            arquivos_causas("v2"),
-            ("CAUSAS_OBITOS_2015_2019_V2.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"),
-        )
+    def test_nomes_dos_arquivos_por_versao(self):
+        self.assertEqual(ARQUIVOS_CAUSAS["v1"], ("CAUSAS_OBITOS_2015_2019.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"))
+        self.assertEqual(ARQUIVOS_CAUSAS["v2"], ("CAUSAS_OBITOS_2015_2019_V2.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"))
+
+    def test_load_period_sex_rejeita_versao_inexistente(self):
         with self.assertRaises(ValueError):
-            arquivos_causas("v3")
+            load_period_sex(".", "2015-2019", 1, versao_causas="v9")
 
     def test_agrupamentos_preservam_categorias_obitos_e_fechamento(self):
         categorias = list(next(iter(CAUSE_GROUPINGS.values())))

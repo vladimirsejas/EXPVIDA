@@ -71,6 +71,10 @@ CAUSE_GROUPS_BY_NAME = {
     name: tuple(dict.fromkeys(mapping.values()))
     for name, mapping in CAUSE_GROUPINGS.items()
 }
+ARQUIVOS_CAUSAS = {
+    "v1": ("CAUSAS_OBITOS_2015_2019.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"),
+    "v2": ("CAUSAS_OBITOS_2015_2019_V2.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"),
+}
 AGE_WIDTHS = np.array([1, 4] + [5] * 15 + [None], dtype=object)
 
 
@@ -89,12 +93,8 @@ def agrupar_categorias_causa(part, agrupamento="atual"):
 
 def arquivos_causas(versao_causas="v1"):
     """Retorna os arquivos de contagens SIM correspondentes à versão solicitada."""
-    arquivos = {
-        "v1": ("CAUSAS_OBITOS_2015_2019.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS.csv"),
-        "v2": ("CAUSAS_OBITOS_2015_2019_V2.csv", "CAUSAS_OBITOS_OUTROS_PERIODOS_V2.csv"),
-    }
     try:
-        return arquivos[versao_causas]
+        return ARQUIVOS_CAUSAS[versao_causas]
     except (KeyError, TypeError):
         raise ValueError(f"Versão de causas desconhecida: {versao_causas}") from None
 
