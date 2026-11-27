@@ -21,7 +21,7 @@ python -m unittest -v test_classificacao_causas test_h10_shapley
 ```
 
 Esperado:
-- 15 testes de classificação de causas/COVID;
+- 16 testes de classificação de causas/COVID;
 - 4 testes sintéticos de H10;
 - nenhum acesso à internet ou microdados individuais para os testes.
 
@@ -109,7 +109,7 @@ Os resultados antigos devem ser preservados; novos arquivos devem ser identifica
 ## 8. Critérios de conclusão
 
 A tarefa local só estará fechada quando:
-- os 19 testes unitários passarem;
+- os 20 testes unitários passarem;
 - as extrações terminarem sem falhas;
 - os contadores U07/B34.2 forem preenchidos e conferidos;
 - o fechamento por causa for documentado;
