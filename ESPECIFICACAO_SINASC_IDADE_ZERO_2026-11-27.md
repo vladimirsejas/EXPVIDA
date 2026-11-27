@@ -75,89 +75,89 @@ A correspondência de residência entre SINASC e SIM é conceitualmente: residê
 
 ## 6. Fórmula: nascidos vivos → q0 → m0
 
-Para cada microrregião (i), sexo (s) e período (p), definir:
+Para cada microrregião i, sexo s e período p:
 
-[
-q_{0,isp}^{(NV)} = rac{D_{0,isp}}{NV_{isp}}
-]
+```
+q0_NV(i,s,p) = D0(i,s,p) / NV(i,s,p)
+```
 
-em que (D_0) é o número de óbitos de menores de um ano no período e (NV) é o total de nascidos vivos no mesmo período. Se a taxa for armazenada por mil, primeiro dividir por 1.000. O valor usado como probabilidade é a razão sem multiplicador por mil.
+D0 é o número de óbitos de menores de um ano no período e NV é o total de nascidos vivos no mesmo período. Se a taxa estiver armazenada por mil, dividir por 1.000 antes de usar a fórmula. O valor de q0 é a razão sem multiplicador por mil.
 
-**Não usar essa razão diretamente como (m_0).** A função `_life_e0_80` de `h10_shapley.py` recebe taxas centrais (m), não probabilidades (q). Ela converte (m_0) em (q_0) pela fórmula:
+**Não usar essa razão diretamente como m0.** A função `_life_e0_80` de `h10_shapley.py` recebe taxas centrais m, não probabilidades q. Ela converte m0 em q0 assim:
 
-[
-q_0 = rac{m_0}{1+(1-a_0)m_0}
-]
+```
+q0 = m0 / (1 + (1 - a0) * m0)
+```
 
-Logo, para manter exatamente a convenção da função, é necessário inverter a expressão:
+Quando a0 é conhecido, a inversão é:
 
-[
-m_0 = rac{q_0}{1-(1-a_0)m_0^{,0}q_0}
-]
+```
+m0 = q0 / (1 - (1 - a0) * q0)
+```
 
-Na expressão acima, (a_0) depende do próprio (m_0), de acordo com a regra Coale–Demeny implementada no código. Portanto, a inversão correta é resolvida por ramo, usando as mesmas constantes e o mesmo ponto de corte da função:
+No EXPVIDA, porém, a0 depende do próprio m0, conforme a regra Coale–Demeny implementada em `_life_e0_80`. Portanto, usar os mesmos dois ramos e o mesmo ponto de corte de m0 = 0,107.
 
 ### Homens (`sex == 1` em `_life_e0_80`)
 
-- Se (m_0 < 0{,}107), a função usa (a_0=0{,}045+2{,}684m_0). Substituindo e resolvendo a equação quadrática, com (q=q_0^{(NV)}):
+- Se m0 < 0,107, a função usa a0 = 0,045 + 2,684*m0. Substituindo na expressão de q0, a equação a resolver é:
 
-[
-2{,}684q,m_0^2 + [1-0{,}955q]m_0-q=0
-]
+```
+2,684*q*m0^2 + (1 - 0,955*q)*m0 - q = 0
+```
 
 A raiz não negativa é:
 
-[
-m_0 = rac{-[1-0{,}955q]+sqrt{[1-0{,}955q]^2+4(2{,}684)q^2}}{2(2{,}684)q}
-]
+```
+m0 = (-(1 - 0,955*q) + sqrt((1 - 0,955*q)^2 + 4*2,684*q^2)) / (2*2,684*q)
+```
 
-e deve satisfazer (m_0<0{,}107).
+O resultado precisa satisfazer m0 < 0,107.
 
-- Se (m_0geq0{,}107), a função usa (a_0=0{,}330), portanto:
+- Se m0 >= 0,107, a função usa a0 = 0,330:
 
-[
-m_0=rac{q}{1-0{,}670q}
-]
+```
+m0 = q / (1 - 0,670*q)
+```
 
-e o resultado deve satisfazer (m_0geq0{,}107).
+O resultado precisa satisfazer m0 >= 0,107.
 
 ### Mulheres (`sex == 2` em `_life_e0_80`)
 
-- Se (m_0<0{,}107), a função usa (a_0=0{,}053+2{,}800m_0):
+- Se m0 < 0,107, a função usa a0 = 0,053 + 2,800*m0. A equação a resolver é:
 
-[
-2{,}800q,m_0^2 + [1-0{,}947q]m_0-q=0
-]
+```
+2,800*q*m0^2 + (1 - 0,947*q)*m0 - q = 0
+```
 
 A raiz não negativa é:
 
-[
-m_0 = rac{-[1-0{,}947q]+sqrt{[1-0{,}947q]^2+4(2{,}800)q^2}}{2(2{,}800)q}
-]
+```
+m0 = (-(1 - 0,947*q) + sqrt((1 - 0,947*q)^2 + 4*2,800*q^2)) / (2*2,800*q)
+```
 
-e deve satisfazer (m_0<0{,}107).
+O resultado precisa satisfazer m0 < 0,107.
 
-- Se (m_0geq0{,}107), a função usa (a_0=0{,}350):
+- Se m0 >= 0,107, a função usa a0 = 0,350:
 
-[
-m_0=rac{q}{1-0{,}650q}
-]
+```
+m0 = q / (1 - 0,650*q)
+```
 
-e o resultado deve satisfazer (m_0geq0{,}107).
+O resultado precisa satisfazer m0 >= 0,107.
 
-Para (q=0), definir (m_0=0). Para (q>0), calcular os candidatos dos ramos e aceitar somente o que satisfizer a condição do próprio ramo. Se nenhum candidato for consistente, interromper a construção daquela célula e registrar o caso; não escolher o ramo por aproximação. Verificar também (0leq q<1), (m_0geq0) e ausência de denominador nulo.
+Para q = 0, definir m0 = 0. Para q > 0, calcular os candidatos dos ramos e aceitar somente o que satisfizer a condição do próprio ramo. Se nenhum candidato for consistente, interromper a construção daquela célula e registrar o caso; não escolher o ramo por aproximação. Verificar também 0 <= q < 1, m0 >= 0 e ausência de denominador nulo.
 
-**Correção importante da notação:** a expressão de inversão geral, quando (a_0) já é conhecido, é (m_0=q_0/[1-(1-a_0)q_0]). Como no EXPVIDA (a_0) é função de (m_0), as fórmulas quadráticas acima são a forma operacional exata para o ramo de baixa mortalidade; o ramo alto é a inversão direta.
+A equação quadrática resulta diretamente de substituir a0 = A + B*m0 na fórmula q0 = m0/[1 + (1-a0)*m0]. A inversão acima, portanto, reproduz a convenção do código, sem aproximar a0 por uma constante no ramo de baixa mortalidade.
 
 ### Integração com a tábua
 
-- Construir a matriz de taxas centrais de mortalidade com (m_0) obtido acima na primeira coluna.
-- Manter as demais colunas de (m) como estão, calculadas a partir de óbitos/pessoas-ano do POPSVS.
+- Construir a matriz de taxas centrais de mortalidade com m0 obtido acima na primeira coluna.
+- Manter as demais colunas de m como estão, calculadas a partir de óbitos/pessoas-ano do POPSVS.
 - Passar a matriz de 17 faixas (0 a 75–79) e o sexo para `_life_e0_80(mortality_rates, sex)`.
-- Não incluir 80+ na soma de (e_{0-80}), pois a função explicitamente usa as faixas 0 a 75–79.
-- A função calcula (q_0) novamente a partir de (m_0). Isso é intencional: a inversão acima garante que o (q_0) reconstruído pela função seja o valor calculado com nascidos vivos, salvo tolerância numérica.
+- Não incluir 80+ na soma de e0–80, pois a função explicitamente usa as faixas 0 a 75–79.
+- A função calcula q0 novamente a partir de m0. Isso é intencional: a inversão acima garante que o q0 reconstruído pela função seja o valor calculado com nascidos vivos, salvo tolerância numérica.
 
-**Atenção à natureza da razão:** (D_0/NV) calculado com óbitos ocorridos no ano/período e nascimentos do mesmo ano/período é uma taxa de período convencional, não uma probabilidade de coorte observada acompanhando cada nascimento por 12 meses. O documento deve chamar o valor de (q_0) de aproximação de período usada para compatibilizar a tábua, e não de risco individual/coorte exato.
+**Atenção à natureza da razão:** D0/NV calculado com óbitos ocorridos no ano/período e nascimentos do mesmo ano/período é uma taxa de período convencional, não uma probabilidade de coorte observada acompanhando cada nascimento por 12 meses. Chamar q0 de aproximação de período usada para compatibilizar a tábua, e não de risco individual/coorte exato.
 
 ## 7. Riscos e controles obrigatórios
 

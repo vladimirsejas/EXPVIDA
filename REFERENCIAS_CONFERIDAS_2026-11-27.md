@@ -142,6 +142,36 @@
 - **Fonte aberta:** registro PubMed PMID 38582094 e artigo em PMC; metadados e DOI conferem.
 - **O que faz e onde entra no EXPVIDA:** analisa 288 causas por idade, sexo, ano e local em 204 países/territórios e 811 localidades subnacionais, incluindo decomposição da esperança de vida por causa. Entra como referência de que decomposição por idade/causa e escala subnacional já são linhas consolidadas.
 
+## 1.13 Ministério da Saúde (2020) — orientação oficial de codificação COVID-19
+- **Autor institucional:** Brasil. Ministério da Saúde; Secretaria de Vigilância em Saúde; Departamento de Análise em Saúde e Vigilância de Doenças não Transmissíveis; Coordenação-Geral de Informação e Análises Epidemiológicas.
+- **Ano:** 2020; 1ª edição, versão 1, publicada em 11/05/2020.
+- **Título exato:** *Orientações para codificação das causas de morte no contexto da COVID-19*.
+- **Publicação:** documento técnico institucional, Brasília/DF; não é artigo de periódico.
+- **Páginas:** 12 páginas no PDF.
+- **DOI:** não possui DOI identificado.
+- **Fonte aberta:** PDF oficial do Ministério da Saúde: https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/c/covid-19/publicacoes-tecnicas/recomendacoes/orientacoes-para-codificacao-das-causas-de-morte
+- **O que faz e onde entra no EXPVIDA:** estabelece a codificação de causas de morte por COVID-19 e a combinação de B34.2 com marcador U07.1 ou U07.2. Sustenta a regra de classificação usada na auditoria de causas; não autoriza tratar B34.2 isolado como COVID-19.
+
+### 1.14 Ministério da Saúde (2025) — códigos de emergência relacionados à COVID-19
+- **Autor institucional:** Brasil. Ministério da Saúde; Secretaria de Vigilância em Saúde e Ambiente; Departamento de Análise de Saúde e Vigilância de Doenças não Transmissíveis; Coordenação-Geral de Informações e Análises Epidemiológicas.
+- **Ano:** 2025; 1ª edição, versão eletrônica (2ª versão da publicação).
+- **Título exato:** *Orientações para a codificação dos demais códigos de emergência relacionados à COVID-19*.
+- **Publicação:** documento técnico institucional, Brasília/DF; não é artigo de periódico.
+- **Páginas:** 16 páginas impressas (arquivo PDF com 18 páginas, incluindo elementos editoriais).
+- **DOI:** não possui DOI identificado.
+- **Fonte aberta:** PDF oficial do Ministério da Saúde: https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/c/covid-19/publicacoes-tecnicas/guias-e-planos/orientacoes-para-a-codificacao-dos-demais-codigos-de-emergencia-relacionados-a-covid-19.pdf
+- **O que faz e onde entra no EXPVIDA:** atualiza a orientação de codificação de códigos de emergência associados à COVID-19. É fonte técnica complementar para a auditoria da classificação de causas, não um artigo científico sobre o estimando de τ.
+
+### 1.15 FAPESPA — série oficial de mortalidade infantil por UF (2023)
+- **Autor institucional:** Fundação Amazônia de Amparo a Estudos e Pesquisas (FAPESPA).
+- **Ano:** página do indicador do ciclo PCN 2024; a tabela não informa uma data editorial independente.
+- **Título exato:** *Taxa de Mortalidade Infantil, segundo Brasil, Grandes Regiões e Unidades da Federação 2019–2023*.
+- **Publicação:** tabela de indicadores estaduais; não é artigo de periódico.
+- **Volume/páginas:** não se aplicam à página web.
+- **DOI:** não possui DOI identificado.
+- **Fonte aberta:** https://fapespa.pa.gov.br/sistemas/pcn2024/tabelas/4-saude/1-taxa-de-mortalidade-infantil-2019-2023.htm
+- **O que faz e onde entra no EXPVIDA:** apresenta taxas de mortalidade infantil para Brasil, grandes regiões e UFs, com 2023 marcado como preliminar, e atribui os dados ao SIM/SINASC do Ministério da Saúde. É a referência de validação externa proposta na especificação do denominador SINASC; não é resultado calculado pelo EXPVIDA.
+
 ## 2. Não confirmadas ou com conferência incompleta
 
 ### 2.1 Referências com metadados bibliográficos confirmados, mas fonte editorial não totalmente acessível
