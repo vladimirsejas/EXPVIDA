@@ -51,6 +51,8 @@ def grupo_causa(cb, linhas_do_atestado=()):
     if len(s) < 3 or not s[0].isalpha() or not s[1:3].isdigit():
         return "sem_causa"
     L, n = s[0], int(s[1:3])
+    if L == "U" and n == 7:
+        return "covid19"
     if L == "B" and n == 34:
         codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
         if "U071" in codigos or "U072" in codigos:
