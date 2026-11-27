@@ -37,12 +37,13 @@ A afirmação em `RESULTADOS_MUNICIPIOS.md` de que B34.2 é “a COVID-19” sim
 
 Foi atualizada a cópia de trabalho de `causas_sim.py` para:
 1. ler também LINHAA-D e LINHAII;
-2. classificar como `covid19` apenas quando a causa básica é B34.2 e há marcador U07.1/U07.2 nas linhas da DO;
-3. manter B34.2 sem marcador em `infecciosas`;
-4. não trocar a causa básica por COVID quando U07 aparece apenas com outra causa básica;
-5. usar diretório de cache versionado para evitar reutilizar agregações antigas sem marcador.
+2. reconhecer U07.1/U07.2 diretamente quando aparecerem como causa básica, e reconhecer B34.2 como COVID somente quando acompanhado do marcador U07.1/U07.2;
+3. classificar como `covid19` quando a causa básica é U07.1/U07.2, ou quando é B34.2 acompanhado do marcador U07.1/U07.2 nas linhas da DO;
+4. manter B34.2 sem marcador em `infecciosas`;
+5. não trocar a causa básica por COVID quando U07 aparece apenas com outra causa básica;
+6. usar diretório de cache versionado para evitar reutilizar agregações antigas sem marcador.
 
-Também foi atualizada a cópia de trabalho de `causas_sim_periodos.py` para usar cache versionado, e criado `test_classificacao_causas.py` com nove testes unitários.
+Também foram atualizadas as cópias de trabalho de `causas_sim_periodos.py` e `causas_municipio.py` para usar caches versionados e aplicar a mesma regra de marcador na extração municipal. Foi criado `test_classificacao_causas.py` com 13 testes unitários.
 
 **Limite importante:** esses testes foram escritos, mas não executados neste ambiente. A extração completa dos arquivos SIM deve ser reexecutada localmente por Claude para gerar novas tabelas. Os CSV atuais e os resultados que deles dependem continuam sendo os resultados da classificação anterior até que a reextração seja validada.
 
