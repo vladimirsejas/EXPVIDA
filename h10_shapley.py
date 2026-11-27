@@ -131,6 +131,42 @@ def _life_e0_80(mortality_rates, sex):
     return L.sum(axis=1)
 
 
+def _life_e1_80(mortality_rates):
+    """Calcula e1-80 com taxas para as idades 1-4 a 75-79."""
+    m = np.asarray(mortality_rates, dtype=float)
+    if m.ndim != 2 or m.shape[1] != 16:
+        raise ValueError("A tábua e1-80 requer taxas para 16 grupos etários (1-4 a 75-79)")
+    n = np.array([4.0] + [5.0] * 15)
+    nax = n / 2.0
+    q = np.minimum(1.0, n[None, :] * m / (1.0 + (n - nax)[None, :] * m))
+
+    l = np.ones((m.shape[0], 17), dtype=float)
+    for j in range(16):
+        l[:, j + 1] = l[:, j] * (1.0 - q[:, j])
+
+    L = n[None, :] * l[:, 1:] + nax[None, :] * (l[:, :-1] - l[:, 1:])
+    return L.sum(axis=1)
+
+
+def _redistribuir_indeterminadas(deaths, group_names, agrupamento, fracao):
+    if fracao not in (0.0, 0.5, 1.0):
+        raise ValueError("fracao_indeterminada_agressao deve ser 0.0, 0.5 ou 1.0")
+    adjusted = np.asarray(deaths, dtype=float).copy()
+    if fracao == 0.0:
+        return adjusted
+    if agrupamento != "violencia_detalhada":
+        raise ValueError("fracao_indeterminada_agressao só vale com agrupamento='violencia_detalhada'")
+    try:
+        aggression = group_names.index("agressoes_intervencao_legal")
+        undetermined = group_names.index("intencao_indeterminada")
+    except ValueError:
+        raise ValueError("O agrupamento detalhado precisa conter os grupos de agressões e intenção indeterminada") from None
+    moved = adjusted[:, :, undetermined] * fracao
+    adjusted[:, :, aggression] += moved
+    adjusted[:, :, undetermined] -= moved
+    return adjusted
+
+
 def variance_e0_80(deaths_by_cause, person_years, sex, national_rates, equalized_mask=0):
     """Variância territorial sob um cenário; bit=1 equaliza o grupo correspondente."""
     d = np.asarray(deaths_by_cause, dtype=float)
@@ -150,7 +186,7 @@ def variance_e0_80(deaths_by_cause, person_years, sex, national_rates, equalized
     return float(np.var(e, ddof=0)), e
 
 
-def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_groups=16):
+def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_groups=16, idade_inicial=0):
     """Calcula Shapley exato sobre todos os 2^K cenários."""
     d = np.asarray(deaths_by_cause, dtype=float)
     py = np.asarray(person_years, dtype=float)
@@ -167,6 +203,8 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
         group_names = [f"causa_{j+1}" for j in range(k)]
     if len(group_names) != k:
         raise ValueError("group_names precisa ter um nome por grupo")
+    if idade_inicial not in (0, 1):
+        raise ValueError("idade_inicial deve ser 0 ou 1")
 
     national_rates = d.sum(axis=0) / py.sum(axis=0)[:, None]
     local_rates = d / py[:, :, None]
@@ -177,7 +215,10 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
     for mask in range(n_masks):
         bits = np.fromiter(((mask >> j) & 1 for j in range(k)), dtype=float, count=k)
         total_rates = base_total_rates + (delta_rates @ bits).reshape(n, ages)
-        e = _life_e0_80(total_rates[:, :17], sex)
+        if idade_inicial == 0:
+            e = _life_e0_80(total_rates[:, :17], sex)
+        else:
+            e = _life_e1_80(total_rates[:, 1:17])
         values[mask] = np.var(e, ddof=0)
 
     base, fully_equalized = values[0], values[-1]
@@ -205,8 +246,21 @@ def shapley_variance(deaths_by_cause, person_years, sex, group_names=None, max_g
     }
 
 
-def load_period_sex(data_dir, period, sex, agrupamento="atual", versao_causas="v1"):
+def load_period_sex(
+    data_dir,
+    period,
+    sex,
+    agrupamento="atual",
+    versao_causas="v1",
+    fracao_indeterminada_agressao=0.0,
+):
     """Carrega dados versionados do EXPVIDA e prepara tensor de causas e exposição."""
+    if agrupamento not in CAUSE_GROUPINGS:
+        raise ValueError(f"Agrupamento desconhecido: {agrupamento}")
+    if fracao_indeterminada_agressao not in (0.0, 0.5, 1.0):
+        raise ValueError("fracao_indeterminada_agressao deve ser 0.0, 0.5 ou 1.0")
+    if fracao_indeterminada_agressao != 0.0 and agrupamento != "violencia_detalhada":
+        raise ValueError("fracao_indeterminada_agressao só vale com agrupamento='violencia_detalhada'")
     data_dir = Path(data_dir)
     arquivo_2015_2019, arquivo_outros_periodos = arquivos_causas(versao_causas)
     d1 = pd.read_csv(data_dir / arquivo_2015_2019, sep=";", dtype={"microrregiao": str})
@@ -217,8 +271,6 @@ def load_period_sex(data_dir, period, sex, agrupamento="atual", versao_causas="v
     if (period, sex) not in D:
         raise ValueError(f"Período/sexo não encontrado na base geral: {period}, {sex}")
     py = PY[(period, sex)]
-    if agrupamento not in CAUSE_GROUPINGS:
-        raise ValueError(f"Agrupamento desconhecido: {agrupamento}")
     group_names = CAUSE_GROUPS_BY_NAME[agrupamento]
     deaths = np.zeros((len(codes), len(dm.IDADES), len(group_names)), dtype=float)
     code_idx = {str(code): i for i, code in enumerate(codes)}
@@ -231,6 +283,10 @@ def load_period_sex(data_dir, period, sex, agrupamento="atual", versao_causas="v
         a = age_idx.get(int(row.idade_inicio))
         if i is not None and a is not None:
             deaths[i, a, group_idx[row.grupo_h10]] += float(row.obitos)
+
+    deaths = _redistribuir_indeterminadas(
+        deaths, list(group_names), agrupamento, fracao_indeterminada_agressao
+    )
 
     all_cause = D[(period, sex)]
     difference = deaths.sum(axis=2) - all_cause
@@ -245,15 +301,29 @@ def load_period_sex(data_dir, period, sex, agrupamento="atual", versao_causas="v
     return deaths, py, list(group_names), diagnostics
 
 
-def run_h10(data_dir, period, sex, strict_closure=True, agrupamento="atual", versao_causas="v1"):
+def run_h10(
+    data_dir,
+    period,
+    sex,
+    strict_closure=True,
+    agrupamento="atual",
+    versao_causas="v1",
+    idade_inicial=0,
+    fracao_indeterminada_agressao=0.0,
+):
     deaths, py, groups, diagnostics = load_period_sex(
-        data_dir, period, sex, agrupamento=agrupamento, versao_causas=versao_causas
+        data_dir,
+        period,
+        sex,
+        agrupamento=agrupamento,
+        versao_causas=versao_causas,
+        fracao_indeterminada_agressao=fracao_indeterminada_agressao,
     )
     if strict_closure and diagnostics["cells_with_difference"] > 0:
         raise ValueError(
             "As causas não fecham com a base geral. Resolver diferenças antes de estimar H10: "
             + str(diagnostics)
         )
-    result = shapley_variance(deaths, py, sex, groups)
+    result = shapley_variance(deaths, py, sex, groups, idade_inicial=idade_inicial)
     result["diagnostics"] = diagnostics
     return result

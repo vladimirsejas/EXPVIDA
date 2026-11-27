@@ -11,6 +11,8 @@ from h10_shapley import (
     CAUSE_GROUP,
     CAUSE_GROUPINGS,
     CAUSE_GROUPS_BY_NAME,
+    _life_e1_80,
+    _redistribuir_indeterminadas,
     agrupar_categorias_causa,
     arquivos_causas,
     load_period_sex,
@@ -109,6 +111,48 @@ class TestH10Shapley(unittest.TestCase):
             r["contributions"].sum(),
             places=12,
         )
+
+    def test_life_e1_80_mortalidade_zero_soma_79(self):
+        np.testing.assert_array_equal(_life_e1_80(np.zeros((2, 16))), np.array([79.0, 79.0]))
+
+    def test_shapley_closes_com_idade_inicial_1(self):
+        r = shapley_variance(
+            self.deaths, self.py, 1, ["causa_variavel", "causa_constante"], idade_inicial=1
+        )
+        self.assertAlmostEqual(r["closure_error"], 0.0, places=12)
+        self.assertAlmostEqual(
+            float(r["contributions"].sum()),
+            r["variance_observed"] - r["variance_all_causes_equalized"],
+            places=12,
+        )
+
+    def test_fracao_indeterminada_mantem_total_de_obitos(self):
+        groups = list(CAUSE_GROUPS_BY_NAME["violencia_detalhada"])
+        group_idx = {name: i for i, name in enumerate(groups)}
+        deaths = np.zeros((2, 18, len(groups)), dtype=float)
+        deaths[:, :, group_idx["intencao_indeterminada"]] = np.arange(1, 37).reshape(2, 18)
+        deaths[:, :, group_idx["agressoes_intervencao_legal"]] = 7
+        total_original = deaths.sum()
+
+        metade = _redistribuir_indeterminadas(deaths, groups, "violencia_detalhada", 0.5)
+        completa = _redistribuir_indeterminadas(deaths, groups, "violencia_detalhada", 1.0)
+        self.assertEqual(metade.sum(), total_original)
+        self.assertEqual(completa.sum(), total_original)
+        self.assertTrue(np.all(completa[:, :, group_idx["intencao_indeterminada"]] == 0))
+
+    def test_fracao_indeterminada_invalida_levanta_erro(self):
+        groups = list(CAUSE_GROUPS_BY_NAME["violencia_detalhada"])
+        deaths = np.zeros((1, 18, len(groups)), dtype=float)
+        with self.assertRaises(ValueError):
+            _redistribuir_indeterminadas(deaths, groups, "violencia_detalhada", 0.3)
+        with self.assertRaises(ValueError):
+            load_period_sex(
+                ".",
+                "2015-2019",
+                1,
+                agrupamento="violencia_detalhada",
+                fracao_indeterminada_agressao=0.3,
+            )
 
     def test_variable_cause_gets_positive_contribution(self):
         r = shapley_variance(self.deaths, self.py, 1, ["causa_variavel", "causa_constante"])
