@@ -17,7 +17,7 @@ Causas (CAUSABAS, CID-10), mutuamente exclusivas:
   transito_pedestre V01-V09 | transito_ciclista V10-V19 | transito_moto V20-V29 | transito_automovel V40-V49
   transito_pesado V60-V79 | transito_outros (demais V01-V99)
   afogamento W65-W74 | quedas W00-W19 | acidentes_outros (demais W00-X59) | externas_outras (demais V-Y)
-  covid U07 | infecciosas A00-B99 | neoplasias C00-D48 | diabetes E10-E14 | endocrinas_outras (demais E)
+  covid U07 ou B34.2 + marcador U07.1/U07.2 | infecciosas A00-B99 | neoplasias C00-D48 | diabetes E10-E14 | endocrinas_outras (demais E)
   isquemicas I20-I25 | cerebrovasculares I60-I69 | hipertensivas I10-I15 | circulatorias_outras (demais I)
   pneumonia_influenza J09-J18 | respiratorias_cronicas J40-J47 | respiratorias_outras (demais J)
   demencias F00-F03 e G30 | renais N17-N19 | alcool F10, K70, X45 | digestivas_outras (demais K)
@@ -45,7 +45,7 @@ import brasil_expectativa as be
 import inventario_sim_ac as inv
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(tempfile.gettempdir(), "expvida_municipio_cache")
+CACHE = os.path.join(tempfile.gettempdir(), "expvida_municipio_cache_v2")
 PERIODOS = be.PERIODOS
 ANO_PER = {a: p for p, anos in PERIODOS.items() for a in anos}
 UFS = be.UFS
@@ -74,12 +74,16 @@ AMPLA["diabetes"] = "diabetes"
 AMPLA["covid"] = "covid"
 
 
-def causa(cb):
+def causa(cb, linhas_do_atestado=()):
     """CAUSABAS (bytes, ex.: b'X954') -> causa detalhada (mutuamente exclusiva)."""
     s = cb.decode("latin-1").strip().upper()
     if len(s) < 3 or not s[0].isalpha() or not s[1:3].isdigit():
         return "sem_causa"
     L, n = s[0], int(s[1:3])
+    if L == "B" and n == 34:
+        codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
+        if "U071" in codigos or "U072" in codigos:
+            return "covid"
     if L == "X" and 93 <= n <= 95:
         return "agressao_arma_fogo"
     if L == "X" and n == 99:
@@ -169,13 +173,14 @@ def _cat(valor, validos):
 def contar(dbf):
     n_reg, tam_cab, tam_reg, cols = inv.ler_dbf(dbf)
     pos = {nome: (a, b) for nome, a, b in cols}
-    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS"):
+    for nome in ("SEXO", "IDADE", "CODMUNRES", "CAUSABAS", "LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII"):
         if nome not in pos:
             raise RuntimeError("coluna %s ausente no arquivo" % nome)
     s0, s1 = pos["SEXO"]
     i0, i1 = pos["IDADE"]
     m0, m1 = pos["CODMUNRES"]
     c0, c1 = pos["CAUSABAS"]
+    campos_linhas = [pos[n] for n in ("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII")]
     r01 = pos.get("RACACOR")
     e01 = pos.get("ESC")
     cont = defaultdict(int)
@@ -202,9 +207,11 @@ def contar(dbf):
                     f = G2F[g]
                     mun = dbf[base + m0:base + m1].strip()[:6].decode("latin-1")
                     cb = dbf[base + c0:base + c1].strip()
-                    c = gc.get(cb)
+                    marcadores = [dbf[base + a:base + b].strip() for a, b in campos_linhas]
+                    chave = (cb, tuple(marcadores))
+                    c = gc.get(chave)
                     if c is None:
-                        c = gc[cb] = causa(cb)
+                        c = gc[chave] = causa(cb, marcadores)
                     if c == "sem_causa":
                         q["sem_causa"] += 1
                     sxs = sx.decode("latin-1")
