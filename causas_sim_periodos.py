@@ -17,7 +17,7 @@ import causas_sim as cs
 PERIODOS = {"2000-2004": range(2000, 2005), "2005-2009": range(2005, 2010), "2010-2014": range(2010, 2015),
             "2020-2021 pandemia": range(2020, 2022), "2022-2024": range(2022, 2025)}
 ANO_PER = {a: p for p, r in PERIODOS.items() for a in r}
-cs.CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache2")
+cs.CACHE = os.path.join(tempfile.gettempdir(), "expvida_causas_cache2_v2")
 
 
 def principal():
