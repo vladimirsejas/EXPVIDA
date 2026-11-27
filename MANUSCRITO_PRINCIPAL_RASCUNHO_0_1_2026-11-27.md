@@ -177,9 +177,11 @@ A interpretação deve permanecer restrita à mortalidade registrada e à hetero
 3. Lima, E. E. C., et al. (2024). Analyzing regional patterns of mortality data quality and adult mortality for small areas in Brazil, 1980–2010. *Demographic Research*, 51(44). https://doi.org/10.4054/DemRes.2024.51.44
 4. Vierboom, Y. C., Preston, S. H., & Hendi, A. S. (2019). Rising geographic inequality in mortality in the United States. *SSM - Population Health*, 9, 100478. https://doi.org/10.1016/j.ssmph.2019.100478
 5. Nau, C., & Firebaugh, G. (2012). A new method for determining why length of life is more unequal in some populations than in others. *Demography*, 49(4), 1207–1230. https://doi.org/10.1007/s13524-012-0133-9
-6. Martin, J., & Camarda, C. G. (2026). Modeling smooth and localized mortality patterns across age, time, and space to uncover small-area inequalities. *Journal of the Royal Statistical Society: Series A*. https://doi.org/10.1093/jrsssa/qnag093
-7. Gonzaga, M. R., et al. (2024). Estimation and probabilistic projection of age- and sex-specific mortality rates across Brazilian municipalities between 2010 and 2030. *Population Health Metrics*. https://doi.org/10.1186/s12963-024-00329-x
-8. Monteiro da Silva, et al. (2026). The Emergence of an Urban Mortality Advantage in Brazil: An Assessment of Age and Causes-of-Death Contributions to the Urban–Rural Mortality Gap. *Journal of Urban Health*. https://doi.org/10.1007/s11524-026-01076-0
+6. Gonzaga, M. R., & Schmertmann, C. P. (2016). Estimating age- and sex-specific mortality rates for small areas with TOPALS regression: an application to Brazil in 2010. *Revista Brasileira de Estudos de População*, 33(3), 629–652. https://doi.org/10.20947/S0102-30982016c0009
+7. Martin, J., & Camarda, C. G. (2026). Modeling smooth and localized mortality patterns across age, time, and space to uncover small-area inequalities. *Journal of the Royal Statistical Society: Series A*. https://doi.org/10.1093/jrsssa/qnag093
+8. Gonzaga, M. R., et al. (2024). Estimation and probabilistic projection of age- and sex-specific mortality rates across Brazilian municipalities between 2010 and 2030. *Population Health Metrics*. https://doi.org/10.1186/s12963-024-00329-x
+9. Seaman, R., Riffe, T., & Caswell, H. (2019). Changing contribution of area-level deprivation to total variance in age at death: a population-based decomposition analysis. *BMJ Open*, 9(3), e024952. https://doi.org/10.1136/bmjopen-2018-024952
+10. Monteiro da Silva, et al. (2026). The Emergence of an Urban Mortality Advantage in Brazil: An Assessment of Age and Causes-of-Death Contributions to the Urban–Rural Mortality Gap. *Journal of Urban Health*. https://doi.org/10.1007/s11524-026-01076-0
 
 ## Pendências editoriais antes de submissão
 
