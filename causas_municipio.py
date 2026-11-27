@@ -81,8 +81,12 @@ def causa(cb, linhas_do_atestado=()):
         return "sem_causa"
     L, n = s[0], int(s[1:3])
     if L == "B" and n == 34:
-        codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
-        if "U071" in codigos or "U072" in codigos:
+        if isinstance(linhas_do_atestado, bool):
+            marcador = linhas_do_atestado
+        else:
+            codigos = "".join(ch for valor in linhas_do_atestado for ch in (valor.decode("latin-1") if isinstance(valor, bytes) else str(valor)).upper() if ch.isalnum())
+            marcador = "U071" in codigos or "U072" in codigos
+        if marcador:
             return "covid"
     if L == "X" and 93 <= n <= 95:
         return "agressao_arma_fogo"
@@ -208,10 +212,11 @@ def contar(dbf):
                     mun = dbf[base + m0:base + m1].strip()[:6].decode("latin-1")
                     cb = dbf[base + c0:base + c1].strip()
                     marcadores = [dbf[base + a:base + b].strip() for a, b in campos_linhas]
-                    chave = (cb, tuple(marcadores))
+                    tem_marcador = any("U071" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") or "U072" in v.decode("latin-1").upper().replace(".", "").replace("-", "").replace(" ", "") for v in marcadores)
+                    chave = (cb, tem_marcador)
                     c = gc.get(chave)
                     if c is None:
-                        c = gc[chave] = causa(cb, marcadores)
+                        c = gc[chave] = causa(cb, tem_marcador)
                     if c == "sem_causa":
                         q["sem_causa"] += 1
                     sxs = sx.decode("latin-1")
