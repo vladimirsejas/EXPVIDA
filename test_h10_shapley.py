@@ -26,6 +26,8 @@ class TestH10Shapley(unittest.TestCase):
     def test_shapley_closes(self):
         r = shapley_variance(self.deaths, self.py, 1, ["causa_variavel", "causa_constante"])
         self.assertAlmostEqual(r["closure_error"], 0.0, places=12)
+        # Evita regressão que divide taxas por pessoas-ano uma segunda vez.
+        self.assertGreater(r["variance_observed"], 1e-10)
         self.assertAlmostEqual(
             r["variance_reduction"],
             r["contributions"].sum(),
