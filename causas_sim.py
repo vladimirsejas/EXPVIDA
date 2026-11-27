@@ -51,7 +51,8 @@ def grupo_causa(cb, linhas_do_atestado=()):
     if len(s) < 3 or not s[0].isalpha() or not s[1:3].isdigit():
         return "sem_causa"
     L, n = s[0], int(s[1:3])
-    if L == "U" and n == 7:
+    codigo_normalizado = s.replace(".", "").replace("-", "").replace(" ", "")
+    if codigo_normalizado in ("U071", "U072"):
         return "covid19"
     if L == "B" and n == 34:
         if isinstance(linhas_do_atestado, bool):
