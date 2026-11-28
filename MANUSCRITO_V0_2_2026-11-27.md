@@ -14,7 +14,7 @@
 
 **Métodos:** Foram utilizados registros de óbitos do SIM/DATASUS e estimativas populacionais POPSVS, agregados em microrregiões. A decomposição H10 empregou cenários contrafactuais de equalização das taxas locais para taxas nacionais e atribuição de contribuições pelo valor de Shapley. A sensibilidade redistribuiu frações 0,0, 0,5 e 1,0 dos óbitos por intenção indeterminada para agressões. A heterogeneidade territorial específica das agressões foi descrita por τ e IC95%, por sexo, faixa etária e período. Os registros B34.2 foram contabilizados com e sem U07.
 
-**Resultados:** Na decomposição H10, a contribuição de agressões e intervenção legal entre homens variou de 18,37% a 46,67%; entre mulheres, variou de 1,29% a 2,77%. Em 2015–2019, a sensibilidade entre homens produziu contribuições de 46,67%, 47,94% e 49,21% nos cenários de fração 0,0, 0,5 e 1,0 (Tabelas 1 e 2; Figuras 1 e 2). Para homens de 15–29 anos, τ permaneceu entre 0,75 e 0,85 nos seis períodos, com intervalos sobrepostos, indicando estabilidade/persistência. Entre mulheres de 15–29 anos, τ foi menor em todos os períodos, entre 0,50 e 0,62 (Tabela 3; Figura 3). Os registros B34.2 com e sem U07 estão discriminados na Tabela 4.
+**Resultados:** Na decomposição H10, a contribuição de agressões e intervenção legal entre homens variou de 18,37% a 46,67%; entre mulheres, variou de 1,29% a 2,77%. Em 2015–2019, a sensibilidade entre homens produziu contribuições de 46,67%, 47,94% e 49,21% nos cenários de fração 0,0, 0,5 e 1,0 (Tabelas 1 e 2; Figuras 1 e 2). Para homens de 15–29 anos, τ permaneceu entre 0,75 e 0,85 nos seis períodos, com intervalos sobrepostos, indicando persistência. Entre mulheres de 15–29 anos, τ foi menor em todos os períodos, entre 0,50 e 0,62 (Tabela 3; Figura 3). Os registros B34.2 com e sem U07 estão discriminados na Tabela 4.
 
 **Conclusão:** A decomposição por causas revela contribuições distintas por sexo e período; τ de agressões aponta persistência da heterogeneidade territorial entre homens jovens e valores menores entre mulheres da mesma faixa. As estimativas para mulheres de 60 anos ou mais em períodos específicos são instáveis e não devem ser interpretadas.
 
@@ -72,7 +72,7 @@ D_i sim \operatorname{Poisson}\{E_i\exp(\mu+u_i)\},
 
 O valor (E_i) corresponde aos óbitos esperados se a microrregião apresentasse a taxa de mortalidade do restante do Brasil na mesma idade, sexo e período. A própria microrregião é excluída do cálculo da taxa de referência (leave-one-out). O parâmetro μ representa o nível médio comum e τ é o desvio-padrão dos efeitos territoriais na escala logarítmica.
 
-Assim, τ quantifica a heterogeneidade residual entre microrregiões após considerar a variação Poisson. Sob a distribuição normal dos efeitos, a razão esperada entre os percentis 90 e 10 dos riscos territoriais é εxp(2,563τ). O parâmetro não representa uma medida pura de desigualdade da mortalidade real: inclui também diferenças persistentes na cobertura do SIM e erros dos denominadores populacionais.
+Assim, τ quantifica a heterogeneidade residual entre microrregiões após considerar a variação Poisson. Sob a distribuição normal dos efeitos, a razão esperada entre os percentis 90 e 10 dos riscos territoriais é exp(2,563τ). O parâmetro não representa uma medida pura de desigualdade da mortalidade real: inclui também diferenças persistentes na cobertura do SIM e erros dos denominadores populacionais.
 
 A verossimilhança marginal foi aproximada por quadratura de Gauss-Hermite adaptativa, com 15 nós e otimização numérica. O modelo foi avaliado previamente por simulações com valores conhecidos de τ. Os intervalos de perfil de verossimilhança foram utilizados para estimativas pontuais de τ.
 
@@ -177,7 +177,7 @@ A Tabela 2 apresenta a contribuição de agressões e intervenção legal entre 
 
 ### 3.3 τ de agressões por sexo, faixa etária e período
 
-A Tabela 3 apresenta τ e IC95% por período, sexo e faixa etária. Entre homens de 15–29 anos, τ permaneceu entre 0,75 e 0,85 nos seis períodos. Os intervalos de confiança se sobrepõem; o padrão deve ser descrito como **estabilidade/persistência da heterogeneidade territorial**, e não como queda ou aumento temporal.
+A Tabela 3 apresenta τ e IC95% por período, sexo e faixa etária. Entre homens de 15–29 anos, τ permaneceu entre 0,75 e 0,85 nos seis períodos. Os intervalos de confiança se sobrepõem; o padrão deve ser descrito como **persistência da heterogeneidade territorial**, e não como queda ou aumento temporal.
 
 Entre mulheres de 15–29 anos, τ foi menor que entre homens em todos os períodos, variando de 0,50 a 0,62. O contraste entre os sexos também aparece nas faixas de 15–19, 20–24 e 25–29 anos.
 
@@ -288,7 +288,7 @@ A decomposição H10 indica que a contribuição de agressões e intervenção l
 
 A análise de sensibilidade mostra que a contribuição atribuída a agressões depende da fração de óbitos por intenção indeterminada redistribuída. Isso reforça a necessidade de explicitar as hipóteses de classificação. A análise não identifica a causa verdadeira de cada óbito.
 
-Entre homens de 15–29 anos, os valores de τ permanecem no intervalo observado nos seis períodos e os intervalos de confiança se sobrepõem. A formulação apropriada é estabilidade/persistência da heterogeneidade territorial. Entre mulheres da mesma faixa, τ é menor em todos os períodos. As estimativas para mulheres de 60 anos ou mais em três períodos foram assinaladas como instáveis, poucos óbitos, e não sustentam interpretação substantiva.
+Entre homens de 15–29 anos, os valores de τ permanecem no intervalo observado nos seis períodos e os intervalos de confiança se sobrepõem. A formulação apropriada é persistência da heterogeneidade territorial. Entre mulheres da mesma faixa, τ é menor em todos os períodos. As estimativas para mulheres de 60 anos ou mais em três períodos foram assinaladas como instáveis, poucos óbitos, e não sustentam interpretação substantiva.
 
 A contagem de registros B34.2 com e sem U07 descreve a distribuição dos códigos no arquivo analisado. Não permite, isoladamente, inferir sub-registro, erro de classificação ou validade clínica.
 
@@ -328,7 +328,7 @@ Sétimo, a unidade territorial disponível é a microrregião. Os resultados nã
 
 A decomposição H10 mostrou contribuições distintas dos grupos de causas para a redução contrafactual da variância territorial de e0-80, com contribuição de agressões e intervenção legal maior entre homens do que entre mulheres nos períodos analisados. A análise de sensibilidade demonstrou que a contribuição atribuída a agressões aumenta conforme cresce a fração de óbitos por intenção indeterminada redistribuída para esse grupo.
 
-Na análise específica de agressões, τ entre homens de 15–29 anos apresentou estabilidade/persistência nos seis períodos, com intervalos de confiança sobrepostos. Entre mulheres da mesma faixa, τ foi menor em todos os períodos. As estimativas para mulheres de 60 anos ou mais assinaladas na Tabela 3 são instáveis, poucos óbitos, e não sustentam interpretação.
+Na análise específica de agressões, τ entre homens de 15–29 anos apresentou persistência nos seis períodos, com intervalos de confiança sobrepostos. Entre mulheres da mesma faixa, τ foi menor em todos os períodos. As estimativas para mulheres de 60 anos ou mais assinaladas na Tabela 3 são instáveis, poucos óbitos, e não sustentam interpretação.
 
 As contagens B34.2 com e sem U07 descrevem a distribuição dos registros, mas não permitem inferências clínicas ou causais isoladas. Os resultados devem ser interpretados respeitando as diferenças entre decomposição contrafactual, heterogeneidade residual e contagem de registros.
 
